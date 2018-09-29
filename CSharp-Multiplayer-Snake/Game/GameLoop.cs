@@ -18,6 +18,7 @@ namespace CSharp_Multiplayer_Snake
         private readonly Color snake2Color = Color.BurlyWood;
 
         private Draw draw;
+        private GameLogic logic;
         public Form Form { get; }
         public List<Snake> Snakes { get; }
         public List<Apple> Apples { get; }
@@ -26,73 +27,65 @@ namespace CSharp_Multiplayer_Snake
 
         public GameLoop(Form form)
         {
+            // Save form and create help classes
             Form = form;
             draw = Draw.GetInstance();
             draw.GameLoop = this;
+            logic = new GameLogic();
+
+            // Create snakes
             Snakes = new List<Snake>();
             Snakes.Add(new Snake(new Point(gridSize / 2, gridSize / 2), snake1Color));
+
+            // Create apples
             Apples = new List<Apple>();
-            Apples.Add(new Apple(Snakes, gridSize));
+            Apples.Add(new Apple(Snakes, Apples, gridSize));
+
+            // Start timer
             timer = new Timer(200);
             timer.Elapsed += TimeElapsed;
             timer.Start();
-            Loop();
         }
 
         private void Loop()
         {
+            // For each snake check if next move it eats an apple and then update the snake
             foreach (Snake snake in Snakes)
             {
                 bool hasEaten = false;
-                foreach (Apple apple in Apples)
+                for (int i = Apples.Count - 1; i >= 0; i--)
                 {
-                    if (apple.IsOnHead(snake.GetUpdatedHeadPosition()))
+                    if (logic.EatsAnApple(snake, Apples[i]))
                     {
+                        Apples.Remove(Apples[i]);
                         hasEaten = true;
-                        Apples.Remove(apple);
                         break;
                     }
                 }
                 snake.UpdateBody(hasEaten);
             }
 
+            // For each snake check if next move results in a death
+            foreach (Snake snake in Snakes)
+                if (logic.CheckForDeath(Snakes, snake, gridSize))
+                    snake.IsDead = true;
+
+            // Remove all dead snakes
+            for (int i = Snakes.Count - 1; i >= 0; i--)
+                if (Snakes[i].IsDead)
+                    Snakes.Remove(Snakes[i]);
+
             // Check if an apple has been eaten and has to be respawned
             if (Apples.Count <= 0)
-                Apples.Add(new Apple(Snakes, gridSize));
+                Apples.Add(new Apple(Snakes, Apples, gridSize));
+
+            // Draw the game
             draw.DrawGame();
         }
 
         public void KeyPressedHandler(KeyEventArgs e)
         {
-            Snake snake = Snakes[0];
-            Point previousDirection = snake.PreviousDirection;
-            switch (e.KeyCode)
-            {
-                case Keys.W:
-                case Keys.Up:
-                    if (previousDirection.Equals(Snake.Directions.Down))
-                        break;
-                    snake.Direction = Snake.Directions.Up;
-                    break;
-                case Keys.S:
-                case Keys.Down:
-                    if (previousDirection.Equals(Snake.Directions.Up))
-                        break;
-                    snake.Direction = Snake.Directions.Down;
-                    break;
-                case Keys.A:
-                case Keys.Left:
-                    if (previousDirection.Equals(Snake.Directions.Right))
-                        break;
-                    snake.Direction = Snake.Directions.Left;
-                    break;
-                case Keys.D:
-                case Keys.Right:
-                    if (previousDirection.Equals(Snake.Directions.Left))
-                        break;
-                    snake.Direction = Snake.Directions.Right;
-                    break;
-            }
+            logic.ChangeSnakeDirection(Snakes, e);
         }
 
         private void TimeElapsed(object sender, ElapsedEventArgs e)

@@ -10,8 +10,10 @@ namespace CSharp_Multiplayer_Snake
     public class Snake : GameObject
     {
         public LinkedList<Point> Body { get; private set; }
+        public Point Head => Body.ElementAt(0);
         public Point PreviousDirection { get; set; }
         public Point Direction { get; set; }
+        public bool IsDead { get; set; }
         public readonly Color color;
 
         public Snake(Point headPosition, Color color)
@@ -20,13 +22,13 @@ namespace CSharp_Multiplayer_Snake
             Body.AddFirst(headPosition);
             Direction = Directions.Right;
             PreviousDirection = Direction;
+            IsDead = false;
             this.color = color;
         }
 
         public Point GetUpdatedHeadPosition()
         {
-            Point currentHeadPos = Body.ElementAt(0);
-            return new Point(currentHeadPos.X + Direction.X, currentHeadPos.Y + Direction.Y);
+            return new Point(Head.X + Direction.X, Head.Y + Direction.Y);
         }
 
         public void UpdateBody(bool hasEaten)

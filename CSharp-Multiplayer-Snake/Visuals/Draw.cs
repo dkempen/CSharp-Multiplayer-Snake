@@ -14,7 +14,7 @@ namespace CSharp_Multiplayer_Snake.Visuals
 
         public GameLoop GameLoop { get; set; }
         private int gridSize;
-        
+
         private readonly Color AppleColor = Color.Firebrick;
         private readonly Color backgroundColor = Color.DimGray;
         private readonly int padding = 5;
@@ -36,7 +36,8 @@ namespace CSharp_Multiplayer_Snake.Visuals
 
         public void DrawGame()
         {
-            GameLoop.Form.Refresh();
+            try { GameLoop.Form.Invoke((MethodInvoker)delegate { GameLoop.Form.Refresh(); }); }
+            catch (ObjectDisposedException e) { }
         }
 
         private void DrawSnake(Graphics g, Snake snake)
@@ -57,7 +58,7 @@ namespace CSharp_Multiplayer_Snake.Visuals
 
         private void DrawRectangle(Graphics g, Point position, Color color)
         {
-            g.FillRectangle(new SolidBrush(color), position.X * gridSize + padding, 
+            g.FillRectangle(new SolidBrush(color), position.X * gridSize + padding,
                 position.Y * gridSize + padding, gridSize - padding * 2, gridSize - padding * 2);
         }
 

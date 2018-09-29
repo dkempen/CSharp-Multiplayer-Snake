@@ -11,7 +11,7 @@ namespace CSharp_Multiplayer_Snake
     {
         public Point Position { get; set; }
 
-        public Apple(List<Snake> snakes, int gridSize)
+        public Apple(List<Snake> snakes, List<Apple> apples, int gridSize)
         {
             Random random = new Random();
             List<int> randomX = Enumerable.Range(0, gridSize).OrderBy(n => random.Next()).ToList();
@@ -24,7 +24,7 @@ namespace CSharp_Multiplayer_Snake
                     int y = randomY[yy];
                     Point p = new Point(x, y);
                     bool possible = true;
-                    if (CheckIfPositionIsPossible(snakes, p))
+                    if (CheckIfPositionIsPossible(snakes, apples, p))
                     {
                         Position = p;
                         return;
@@ -33,12 +33,15 @@ namespace CSharp_Multiplayer_Snake
             }
         }
 
-        private bool CheckIfPositionIsPossible(List<Snake> snakes, Point p)
+        private bool CheckIfPositionIsPossible(List<Snake> snakes, List<Apple> apples, Point p)
         {
             foreach (Snake snake in snakes)
                 foreach (Point body in snake.Body)
                     if (body.Equals(p))
                         return false;
+            foreach (Apple apple in apples)
+                if (apple.Equals(p))
+                    return false;
             return true;
         }
 
