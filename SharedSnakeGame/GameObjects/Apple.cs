@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -14,21 +15,18 @@ namespace CSharp_Multiplayer_Snake
         public Apple(List<Snake> snakes, List<Apple> apples, int gridSize)
         {
             Random random = new Random();
-            List<int> randomX = Enumerable.Range(0, gridSize).OrderBy(n => random.Next()).ToList();
-            List<int> randomY = Enumerable.Range(0, gridSize).OrderBy(n => random.Next()).ToList();
-            for (int xx = 0; xx < gridSize; xx++)
+            List<int> randomCoord = Enumerable.Range(0, gridSize * gridSize).OrderBy(n => random.Next()).ToList();
+            for (int i = 0; i < randomCoord.Count; i++)
             {
-                for (int yy = 0; yy < gridSize; yy++)
+                int x = randomCoord[i] / gridSize;
+                int y = randomCoord[i] % gridSize;
+                Point p = new Point(x, y);
+                bool possible = true;
+                if (CheckIfPositionIsPossible(snakes, apples, p))
                 {
-                    int x = randomX[xx];
-                    int y = randomY[yy];
-                    Point p = new Point(x, y);
-                    bool possible = true;
-                    if (CheckIfPositionIsPossible(snakes, apples, p))
-                    {
-                        Position = p;
-                        return;
-                    }
+                    Position = p;
+                    Debug.WriteLine($"Position of Apple {apples.Count + 1}: {Position}");
+                    return;
                 }
             }
         }
@@ -40,7 +38,7 @@ namespace CSharp_Multiplayer_Snake
                     if (body.Equals(p))
                         return false;
             foreach (Apple apple in apples)
-                if (apple.Equals(p))
+                if (apple.Position.Equals(p))
                     return false;
             return true;
         }

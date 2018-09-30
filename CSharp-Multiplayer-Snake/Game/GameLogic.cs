@@ -76,5 +76,14 @@ namespace CSharp_Multiplayer_Snake
         {
             return snake.GetUpdatedHeadPosition().Equals(apple.Position);
         }
+
+        public void AddApples(GameLoop gameLoop)
+        {
+            while (gameLoop.Apples.Count < GameLoop.amountOfApples)
+            {
+                Apple apple = new Apple(gameLoop.Snakes, gameLoop.Apples, GameLoop.gridSize);
+                gameLoop.Apples.Add(apple);     
+            }
+        }
     }
 }

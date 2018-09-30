@@ -14,6 +14,8 @@ namespace CSharp_Multiplayer_Snake
     class GameLoop
     {
         public const int gridSize = 16;
+        public const int amountOfApples = 2;
+        public const int fps = 6;
         private readonly Color snake1Color = Color.Ivory;
         private readonly Color snake2Color = Color.BurlyWood;
 
@@ -39,10 +41,10 @@ namespace CSharp_Multiplayer_Snake
 
             // Create apples
             Apples = new List<Apple>();
-            Apples.Add(new Apple(Snakes, Apples, gridSize));
+            logic.AddApples(this);
 
             // Start timer
-            timer = new Timer(200);
+            timer = new Timer(1000.0 / fps);
             timer.Elapsed += TimeElapsed;
             timer.Start();
         }
@@ -65,7 +67,7 @@ namespace CSharp_Multiplayer_Snake
                 snake.UpdateBody(hasEaten);
             }
 
-            // For each snake check if next move results in a death
+            // For each snake check if it's dead
             foreach (Snake snake in Snakes)
                 if (logic.CheckForDeath(Snakes, snake, gridSize))
                     snake.IsDead = true;
@@ -75,9 +77,8 @@ namespace CSharp_Multiplayer_Snake
                 if (Snakes[i].IsDead)
                     Snakes.Remove(Snakes[i]);
 
-            // Check if an apple has been eaten and has to be respawned
-            if (Apples.Count <= 0)
-                Apples.Add(new Apple(Snakes, Apples, gridSize));
+            // Add the apples back that have been eaten
+            logic.AddApples(this);
 
             // Draw the game
             draw.DrawGame();
