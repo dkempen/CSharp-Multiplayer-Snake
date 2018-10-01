@@ -38,10 +38,16 @@ namespace CSharp_Multiplayer_Snake
 
         public void ChangeSnakeDirection(List<Snake> snakes, KeyEventArgs e)
         {
+            // Return if snake is dead
             if (snakes.Count <= 0)
                 return;
-            // Change direction if the previous direction is not the opposite
+
+            // Return if direction is already changed
             Snake snake = snakes[0];
+            if (snake.Direction != snake.PreviousDirection)
+                return;
+
+            // Change direction if the previous direction is not the opposite
             Point previousDirection = snake.PreviousDirection;
             switch (e.KeyCode)
             {
@@ -81,9 +87,40 @@ namespace CSharp_Multiplayer_Snake
         {
             while (gameLoop.Apples.Count < GameLoop.amountOfApples)
             {
-                Apple apple = new Apple(gameLoop.Snakes, gameLoop.Apples, GameLoop.gridSize);
-                gameLoop.Apples.Add(apple);     
+                Point position = GenerateApplePosition(gameLoop.Snakes, gameLoop.Apples, GameLoop.gridSize);
+                if (position.X != -1 && position.Y != -1)
+                    gameLoop.Apples.Add(new Apple(position));
+                else
+                    return;
             }
+        }
+
+        public Point GenerateApplePosition(List<Snake> snakes, List<Apple> apples, int gridSize)
+        {
+            Random random = new Random();
+            List<int> randomCoord = Enumerable.Range(0, gridSize * gridSize).OrderBy(n => random.Next()).ToList();
+            for (int i = 0; i < randomCoord.Count; i++)
+            {
+                int x = randomCoord[i] / gridSize;
+                int y = randomCoord[i] % gridSize;
+                Point p = new Point(x, y);
+                bool possible = true;
+                if (CheckIfPositionIsPossible(snakes, apples, p))
+                    return p;
+            }
+            return new Point(-1, -1);
+        }
+
+        private bool CheckIfPositionIsPossible(List<Snake> snakes, List<Apple> apples, Point p)
+        {
+            foreach (Snake snake in snakes)
+            foreach (Point body in snake.Body)
+                if (body.Equals(p))
+                    return false;
+            foreach (Apple apple in apples)
+                if (apple.Position.Equals(p))
+                    return false;
+            return true;
         }
     }
 }
