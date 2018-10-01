@@ -1,16 +1,11 @@
 ﻿using CSharp_Multiplayer_Snake.Visuals;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SharedSnakeGame.Game;
 using SharedSnakeGame.Networking;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace CSharp_Multiplayer_Snake.Networking
 {
@@ -35,7 +30,6 @@ namespace CSharp_Multiplayer_Snake.Networking
             client = new TcpClient(ip.ToString(), 6969);
 
             new Thread(Run).Start();
-
         }
 
         public void Run(object o)
@@ -55,7 +49,6 @@ namespace CSharp_Multiplayer_Snake.Networking
         private Tuple<int, GameData> ReadId()
         {
             string received = TcpHandler.ReadMessage(client);
-
             dynamic json = JsonConvert.DeserializeObject<dynamic>(received);
             return Tuple.Create((int)json.id, json.data as GameData);
         }
@@ -69,7 +62,6 @@ namespace CSharp_Multiplayer_Snake.Networking
         {
             string message = TcpHandler.ReadMessage(client);
             dynamic json = JsonConvert.DeserializeObject<dynamic>(message);
-
             return json.newTick;
         }
 
@@ -86,17 +78,12 @@ namespace CSharp_Multiplayer_Snake.Networking
                 System.Console.WriteLine("Client2");
                 //Le draw
                 Draw.GetInstance().DrawGame();
-
             }
-
-
-
         }
 
         private void SendDirection()
         {
             TcpHandler.WriteMessage(client, TcpProtocol.DirectionSend(GetSnake(id).Direction));
-
         }
 
         public void EndGame()
@@ -107,10 +94,8 @@ namespace CSharp_Multiplayer_Snake.Networking
         public Snake GetSnake(int id)
         {
             foreach (Snake snake in gameData.Snakes)
-            {
                 if (id == snake.Id)
                     return snake;
-            }
             return null;
         }
     }

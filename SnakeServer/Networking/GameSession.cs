@@ -16,7 +16,7 @@ namespace SnakeServer.Networking
 
         public GameSession(List<ClientHandler> clientHandlers)
         {
-            this.clients = clientHandlers;
+            clients = clientHandlers;
         }
 
         public void Run(object o)
@@ -35,12 +35,8 @@ namespace SnakeServer.Networking
             gameData.Snakes.Add(new Snake(new Point(gameData.GridSize / 2, gameData.GridSize / 2), Color.Beige, 2));
             logic.AddApples(gameData, amountOfApples);
             
-
             foreach (ClientHandler client in clients)
-            {
                 client.Write(TcpProtocol.IdSend(gameData, client.Id));
-            }
-
         }
 
         public void RunGame()
@@ -58,7 +54,6 @@ namespace SnakeServer.Networking
                 Broadcast(TcpProtocol.DataSend(gameData));
 
                 System.Console.WriteLine("Thicc4");
-
             }
         }
 
@@ -70,27 +65,20 @@ namespace SnakeServer.Networking
         public void Broadcast(JObject message)
         {
             foreach (ClientHandler client in clients)
-            {
                 client.Write(message);
-            }
-
         }
 
         public void ReadAll()
         {
             foreach(ClientHandler client in clients)
-            {
                 GetSnake(client.Id).Direction = TcpProtocol.DirectionReceived(client.Read());
-            }
         }
 
         public Snake GetSnake(int id)
         {
             foreach(Snake snake in gameData.Snakes)
-            {
                 if (id == snake.Id)
                     return snake;
-            }
             return null;
         }
     }

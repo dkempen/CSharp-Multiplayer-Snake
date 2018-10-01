@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharedSnakeGame.Game;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 
 namespace SharedSnakeGame.Networking
 {

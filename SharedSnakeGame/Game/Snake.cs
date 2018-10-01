@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CSharp_Multiplayer_Snake
 {
     public class Snake : GameObject
     {
-        public LinkedList<Point> Body { get; private set; }
+        public LinkedList<Point> Body { get; }
         public Point Head => Body.ElementAt(0);
         public Point PreviousDirection { get; set; }
         public Point Direction { get; set; }

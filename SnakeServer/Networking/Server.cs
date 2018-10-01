@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 
 namespace SnakeServer.Networking
@@ -14,7 +12,6 @@ namespace SnakeServer.Networking
 
         public Server()
         {
-
             IPAddress localhost = IPAddress.Parse("127.0.0.1");
             tcpListener = new TcpListener(localhost, 6969);
             tcpListener.Start();
@@ -39,9 +36,7 @@ namespace SnakeServer.Networking
 
                     previousClient = null;
                 }
-                              
             }
-
         }
     }
 }
