@@ -11,8 +11,9 @@ using Timer = System.Timers.Timer;
 
 namespace CSharp_Multiplayer_Snake
 {
+    
     class GameLoop
-    {
+    {/*
         public const int gridSize = 16;
         public const int amountOfApples = 2;
         public const int fps = 6;
@@ -92,6 +93,7 @@ namespace CSharp_Multiplayer_Snake
         private void TimeElapsed(object sender, ElapsedEventArgs e)
         {
             Loop();
-        }
+        }*/
     }
+    
 }

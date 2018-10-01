@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game\GameLogic.cs" />
-    <Compile Include="Game\GameLoop.cs" />
+    <Compile Include="Networking\ClientHandler.cs" />
     <Compile Include="Networking\GameSession.cs" />
     <Compile Include="Networking\Server.cs" />
     <Compile Include="Program.cs" />
@@ -57,7 +58,9 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
   <Import Project="..\SharedSnakeGame\SharedSnakeGame.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

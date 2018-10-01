@@ -9,12 +9,11 @@
     <Import_RootNamespace>SharedSnakeGame</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)GameObjects\Apple.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameObjects\GameObject.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GameObjects\Snake.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Apple.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\GameData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\GameObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Snake.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Networking\TcpHandler.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)GameObjects\" />
+    <Compile Include="$(MSBuildThisFileDirectory)Networking\TcpProtocol.cs" />
   </ItemGroup>
 </Project>

@@ -15,8 +15,9 @@ namespace CSharp_Multiplayer_Snake
         public Point Direction { get; set; }
         public bool IsDead { get; set; }
         public readonly Color color;
+        public int Id;
 
-        public Snake(Point headPosition, Color color)
+        public Snake(Point headPosition, Color color, int id)
         {
             Body = new LinkedList<Point>();
             Body.AddFirst(headPosition);
@@ -24,6 +25,7 @@ namespace CSharp_Multiplayer_Snake
             PreviousDirection = Direction;
             IsDead = false;
             this.color = color;
+            this.Id = id;
         }
 
         public Point GetUpdatedHeadPosition()

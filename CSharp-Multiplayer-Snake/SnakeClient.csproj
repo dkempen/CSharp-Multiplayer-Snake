@@ -55,7 +55,6 @@
     <Compile Include="Form.Designer.cs">
       <DependentUpon>Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Game\GameLogic.cs" />
     <Compile Include="Game\GameLoop.cs" />
     <Compile Include="Networking\NetworkHandler.cs" />
     <Compile Include="Program.cs" />

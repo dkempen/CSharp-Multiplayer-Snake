@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharedSnakeGame.Game;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -12,7 +13,8 @@ namespace CSharp_Multiplayer_Snake.Visuals
     {
         private static Draw instance;
 
-        public GameLoop GameLoop { get; set; }
+        public GameData GameData { get; set; }
+        public Form Form { get; set; }
         private int gridSize;
 
         private readonly Color AppleColor = Color.Firebrick;
@@ -26,17 +28,17 @@ namespace CSharp_Multiplayer_Snake.Visuals
 
         internal void DrawGame(Graphics g, Panel panel)
         {
-            gridSize = panel.Size.Height / GameLoop.gridSize;
+            gridSize = panel.Size.Height / GameData.GridSize;
             DrawBackgroud(panel);
-            foreach (Snake snake in GameLoop.Snakes)
+            foreach (Snake snake in GameData.Snakes)
                 DrawSnake(g, snake);
-            foreach (Apple apple in GameLoop.Apples)
+            foreach (Apple apple in GameData.Apples)
                 DrawApple(g, apple);
         }
 
         public void DrawGame()
         {
-            try { GameLoop.Form.Invoke((MethodInvoker)delegate { GameLoop.Form.Refresh(); }); }
+            try { Form.Invoke((MethodInvoker)delegate { Form.Refresh(); }); }
             catch (ObjectDisposedException e) { }
         }
 
