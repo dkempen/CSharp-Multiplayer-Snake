@@ -14,15 +14,15 @@ namespace CSharp_Multiplayer_Snake
         public readonly Color color;
         public int Id;
 
-        public Snake(Point headPosition, Color color, int id)
+        public Snake(Point headPosition, Point direction, Color color, int id)
         {
             Body = new LinkedList<Point>();
             Body.AddFirst(headPosition);
-            Direction = Directions.Right;
+            Direction = direction;
             PreviousDirection = Direction;
             IsDead = false;
             this.color = color;
-            this.Id = id;
+            Id = id;
         }
 
         public Point GetUpdatedHeadPosition()

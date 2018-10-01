@@ -24,6 +24,8 @@ namespace CSharp_Multiplayer_Snake.Visuals
 
         internal void DrawGame(Graphics g, Panel panel)
         {
+            if (GameData == null)
+                return;
             gridSize = panel.Size.Height / GameData.GridSize;
             DrawBackgroud(panel);
             foreach (Snake snake in GameData.Snakes)

@@ -4,11 +4,13 @@ using SharedSnakeGame.Game;
 using SharedSnakeGame.Networking;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
+using Newtonsoft.Json.Linq;
 
 namespace CSharp_Multiplayer_Snake.Networking
 {
@@ -26,9 +28,9 @@ namespace CSharp_Multiplayer_Snake.Networking
         public NetworkHandler(Form form)
         {
             this.form = form;
-
             draw = Draw.GetInstance();
             draw.Form = form;
+            draw.GameData = gameData;
             IPAddress ip = IPAddress.Parse("127.0.0.1");
             client = new TcpClient(ip.ToString(), 6969);
 
@@ -47,18 +49,28 @@ namespace CSharp_Multiplayer_Snake.Networking
             Tuple<int, GameData> tuple = ReadId();
             id = tuple.Item1;
             gameData = tuple.Item2;
+            draw.GameData = gameData;
         }
 
         private Tuple<int, GameData> ReadId()
         {
             string received = TcpHandler.ReadMessage(client);
-            dynamic json = JsonConvert.DeserializeObject<dynamic>(received);
-            return Tuple.Create((int)json.id, json.data as GameData);
+            JObject jObject = JObject.Parse(received);
+            string data = (string) jObject["data"];
+            GameData gameData = JsonConvert.DeserializeObject<GameData>(data);
+            return Tuple.Create((int)jObject["id"], gameData);
         }
 
         private GameData ReadData()
         {
-            return JsonConvert.DeserializeObject<GameData>(TcpHandler.ReadMessage(client));
+            string received = TcpHandler.ReadMessage(client);
+            JObject jObject = JObject.Parse(received);
+            string data = (string)jObject["data"];
+            GameData gameData = JsonConvert.DeserializeObject<GameData>(data);
+            // Fix bodies because for some reason it parses with an extra 0,0 coord in the beginning
+            foreach (Snake snake in gameData.Snakes)
+                snake.Body.RemoveFirst();
+            return gameData;
         }
 
         private bool ReadTick()
@@ -74,11 +86,13 @@ namespace CSharp_Multiplayer_Snake.Networking
             {
                 if (!ReadTick())
                     continue;
-                System.Console.WriteLine("Client1");
+                if (gameData.Snakes.Count == 0)
+                {
+                    Debug.WriteLine("something");
+                }
                 SendDirection();
-                System.Console.WriteLine("Client2");
                 gameData = ReadData();
-                System.Console.WriteLine("Client2");
+                draw.GameData = gameData;
                 //Le draw
                 Draw.GetInstance().DrawGame();
             }
