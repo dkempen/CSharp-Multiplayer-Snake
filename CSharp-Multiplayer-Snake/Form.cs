@@ -1,28 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using CSharp_Multiplayer_Snake.Networking;
-using CSharp_Multiplayer_Snake.Visuals;
 
 namespace CSharp_Multiplayer_Snake
 {
     public partial class Form : System.Windows.Forms.Form
     {
-     //   private GameLoop gameLoop;
+        private NetworkHandler networkHandler;
 
         public Form()
         {
             InitializeComponent();
-            NetworkHandler networkHandler = new NetworkHandler(this); 
-
-
-         //   gameLoop = new GameLoop(this);
+            networkHandler = new NetworkHandler(this); 
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -39,7 +28,7 @@ namespace CSharp_Multiplayer_Snake
         
         private void KeyPressedHandler(object sender, KeyEventArgs e)
         {
-          //  gameLoop.KeyPressedHandler(e);
+          networkHandler.KeyPressedHandler(e);
         }
         
     }

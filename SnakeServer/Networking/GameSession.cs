@@ -34,7 +34,7 @@ namespace SnakeServer.Networking
             gameData.Snakes.Add(new Snake(new Point(gameData.GridSize / 2, gameData.GridSize / 2), Color.Ivory, 1));
             gameData.Snakes.Add(new Snake(new Point(gameData.GridSize / 2, gameData.GridSize / 2), Color.Beige, 2));
             logic.AddApples(gameData, amountOfApples);
-            
+
             foreach (ClientHandler client in clients)
                 client.Write(TcpProtocol.IdSend(gameData, client.Id));
         }
@@ -45,15 +45,45 @@ namespace SnakeServer.Networking
 
             while (isRunning)
             {
-                System.Console.WriteLine("Thicc");
+                // Ask all clients for their snakes' direction
                 Broadcast(TcpProtocol.TickSend());
-                System.Console.WriteLine("Thicc2");
-                ReadAll();
-                //Logique
-                System.Console.WriteLine("Thicc3");
-                Broadcast(TcpProtocol.DataSend(gameData));
 
-                System.Console.WriteLine("Thicc4");
+                // Read all client directions
+                ReadAll();
+
+                //Logique
+                
+                // For each snake check if next move it eats an apple and then update the snake
+                foreach (Snake snake in gameData.Snakes)
+                {
+                    bool hasEaten = false;
+                    for (int i = gameData.Apples.Count - 1; i >= 0; i--)
+                    {
+                        if (logic.EatsAnApple(snake, gameData.Apples[i]))
+                        {
+                            gameData.Apples.Remove(gameData.Apples[i]);
+                            hasEaten = true;
+                            break;
+                        }
+                    }
+                    snake.UpdateBody(hasEaten);
+                }
+
+                // For each snake check if it's dead
+                foreach (Snake snake in gameData.Snakes)
+                    if (logic.CheckForDeath(gameData.Snakes, snake, gameData.GridSize))
+                        snake.IsDead = true;
+
+                // Remove all dead snakes
+                for (int i = gameData.Snakes.Count - 1; i >= 0; i--)
+                    if (gameData.Snakes[i].IsDead)
+                        gameData.Snakes.Remove(gameData.Snakes[i]);
+
+                // Add the apples back that have been eaten
+                logic.AddApples(gameData, amountOfApples);
+                
+                // Send updated gameData to the clients
+                Broadcast(TcpProtocol.DataSend(gameData));
             }
         }
 
@@ -70,13 +100,13 @@ namespace SnakeServer.Networking
 
         public void ReadAll()
         {
-            foreach(ClientHandler client in clients)
+            foreach (ClientHandler client in clients)
                 GetSnake(client.Id).Direction = TcpProtocol.DirectionReceived(client.Read());
         }
 
         public Snake GetSnake(int id)
         {
-            foreach(Snake snake in gameData.Snakes)
+            foreach (Snake snake in gameData.Snakes)
                 if (id == snake.Id)
                     return snake;
             return null;

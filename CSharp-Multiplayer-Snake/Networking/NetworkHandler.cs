@@ -3,9 +3,12 @@ using Newtonsoft.Json;
 using SharedSnakeGame.Game;
 using SharedSnakeGame.Networking;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace CSharp_Multiplayer_Snake.Networking
 {
@@ -97,6 +100,43 @@ namespace CSharp_Multiplayer_Snake.Networking
                 if (id == snake.Id)
                     return snake;
             return null;
+        }
+
+        public void KeyPressedHandler(KeyEventArgs e)
+        {
+            Snake snake = GetSnake(id);
+            if (snake == null)
+                return;
+            
+            // Change direction if the previous direction is not the opposite
+            Point previousDirection = snake.PreviousDirection;
+            switch (e.KeyCode)
+            {
+                case Keys.W:
+                case Keys.Up:
+                    if (previousDirection.Equals(Snake.Directions.Down))
+                        break;
+                    snake.Direction = Snake.Directions.Up;
+                    break;
+                case Keys.S:
+                case Keys.Down:
+                    if (previousDirection.Equals(Snake.Directions.Up))
+                        break;
+                    snake.Direction = Snake.Directions.Down;
+                    break;
+                case Keys.A:
+                case Keys.Left:
+                    if (previousDirection.Equals(Snake.Directions.Right))
+                        break;
+                    snake.Direction = Snake.Directions.Left;
+                    break;
+                case Keys.D:
+                case Keys.Right:
+                    if (previousDirection.Equals(Snake.Directions.Left))
+                        break;
+                    snake.Direction = Snake.Directions.Right;
+                    break;
+            }
         }
     }
 }

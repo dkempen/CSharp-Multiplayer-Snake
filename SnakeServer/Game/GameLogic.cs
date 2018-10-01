@@ -32,44 +32,6 @@ namespace CSharp_Multiplayer_Snake
             }
             return false;
         }
-        
-        public void ChangeSnakeDirection(List<Snake> snakes)
-        {
-            /*
-            if (snakes.Count <= 0)
-                return;
-            // Change direction if the previous direction is not the opposite
-            Snake snake = snakes[0];
-            Point previousDirection = snake.PreviousDirection;
-            switch (e.KeyCode)
-            {
-                case Keys.W:
-                case Keys.Up:
-                    if (previousDirection.Equals(Snake.Directions.Down))
-                        break;
-                    snake.Direction = Snake.Directions.Up;
-                    break;
-                case Keys.S:
-                case Keys.Down:
-                    if (previousDirection.Equals(Snake.Directions.Up))
-                        break;
-                    snake.Direction = Snake.Directions.Down;
-                    break;
-                case Keys.A:
-                case Keys.Left:
-                    if (previousDirection.Equals(Snake.Directions.Right))
-                        break;
-                    snake.Direction = Snake.Directions.Left;
-                    break;
-                case Keys.D:
-                case Keys.Right:
-                    if (previousDirection.Equals(Snake.Directions.Left))
-                        break;
-                    snake.Direction = Snake.Directions.Right;
-                    break;
-            }
-            */
-        }
 
         public bool EatsAnApple(Snake snake, Apple apple)
         {
