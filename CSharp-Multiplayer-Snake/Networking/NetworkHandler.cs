@@ -24,6 +24,7 @@ namespace CSharp_Multiplayer_Snake.Networking
         public const int amountOfApples = 2;
         public const int fps = 6;
         private GameData gameData;
+        private bool waitDirectionChange;
 
         public NetworkHandler(Form form)
         {
@@ -91,8 +92,10 @@ namespace CSharp_Multiplayer_Snake.Networking
                     Debug.WriteLine("something");
                 }
                 SendDirection();
+                waitDirectionChange = true;
                 gameData = ReadData();
                 draw.GameData = gameData;
+                waitDirectionChange = false;
                 //Le draw
                 Draw.GetInstance().DrawGame();
             }
@@ -118,6 +121,7 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         public void KeyPressedHandler(KeyEventArgs e)
         {
+            while (waitDirectionChange) { }
             Snake snake = GetSnake(id);
             if (snake == null)
                 return;
