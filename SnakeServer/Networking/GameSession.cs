@@ -38,8 +38,10 @@ namespace SnakeServer.Networking
             logic = new GameLogic();
 
             gameData = new GameData(16);
-            gameData.Snakes.Add(new Snake(new Point((int)(gameData.GridSize * 0.25), (int)(gameData.GridSize * 0.75)), Snake.Directions.Right, Color.Ivory, 1));
-            gameData.Snakes.Add(new Snake(new Point((int)(gameData.GridSize * 0.75), (int)(gameData.GridSize * 0.25)), Snake.Directions.Left, Color.Beige, 2));
+            gameData.Snakes.Add(new Snake(new Point((int)(gameData.GridSize * 0.25), (int)(gameData.GridSize * 0.75)), 
+                Snake.Directions.Right, Color.ForestGreen, 1));
+            gameData.Snakes.Add(new Snake(new Point((int)(gameData.GridSize * 0.75), (int)(gameData.GridSize * 0.25)), 
+                Snake.Directions.Left, Color.DeepSkyBlue, 2));
             logic.AddApples(gameData, amountOfApples);
 
             foreach (ClientHandler client in clients)
@@ -114,7 +116,11 @@ namespace SnakeServer.Networking
         public void ReadAll()
         {
             foreach (ClientHandler client in clients)
-                GetSnake(client.Id).Direction = TcpProtocol.DirectionReceived(client.Read());
+            {
+                Snake snake = GetSnake(client.Id);
+                snake.Direction = TcpProtocol.DirectionReceived(client.Read());
+                snake.PreviousDirection = snake.Direction;
+            }
         }
 
         public Snake GetSnake(int id)

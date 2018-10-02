@@ -31,7 +31,7 @@ namespace CSharp_Multiplayer_Snake.Networking
             draw = Draw.GetInstance();
             draw.Form = form;
             draw.GameData = gameData;
-            IPAddress ip = IPAddress.Parse("127.0.0.1");
+            IPAddress ip = IPAddress.Parse("145.49.59.202");
             client = new TcpClient(ip.ToString(), 6969);
 
             new Thread(Run).Start();
@@ -122,8 +122,12 @@ namespace CSharp_Multiplayer_Snake.Networking
             if (snake == null)
                 return;
             
-            // Change direction if the previous direction is not the opposite
+            // Only appect the first new direction
             Point previousDirection = snake.PreviousDirection;
+            if (previousDirection != snake.Direction)
+                return;
+
+            // Change direction if the previous direction is not the opposite
             switch (e.KeyCode)
             {
                 case Keys.W:
