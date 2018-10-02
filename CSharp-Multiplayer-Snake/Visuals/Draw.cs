@@ -1,5 +1,6 @@
 ﻿using SharedSnakeGame.Game;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -28,7 +29,7 @@ namespace CSharp_Multiplayer_Snake.Visuals
                 return;
             gridSize = panel.Size.Height / GameData.GridSize;
             DrawBackgroud(panel);
-            foreach (Snake snake in GameData.Snakes)
+            foreach (Snake snake in GetAliveSnakes())
                 DrawSnake(g, snake);
             foreach (Apple apple in GameData.Apples)
                 DrawApple(g, apple);
@@ -65,6 +66,15 @@ namespace CSharp_Multiplayer_Snake.Visuals
         private void DrawBackgroud(Panel panel)
         {
             panel.BackColor = backgroundColor;
+        }
+
+        public List<Snake> GetAliveSnakes()
+        {
+            List<Snake> snakes = new List<Snake>();
+            foreach (Snake snake in GameData.Snakes)
+                if (!snake.IsDead)
+                    snakes.Add(snake);
+            return snakes;
         }
     }
 }

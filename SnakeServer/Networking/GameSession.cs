@@ -51,6 +51,11 @@ namespace SnakeServer.Networking
             timer = new Timer();
             timer.Elapsed += OnTimedEvent;
             timer.Interval = 1000.0 / fps;
+
+            RunGameOneTick();
+            // Wait 3 seconds
+            Thread.Sleep(3000);
+
             timer.Start();
         }
 
@@ -68,7 +73,7 @@ namespace SnakeServer.Networking
             //Logique
 
             // For each snake check if next move it eats an apple and then update the snake
-            foreach (Snake snake in gameData.Snakes)
+            foreach (Snake snake in GetAliveSnakes())
             {
                 bool hasEaten = false;
                 for (int i = gameData.Apples.Count - 1; i >= 0; i--)
@@ -84,9 +89,16 @@ namespace SnakeServer.Networking
             }
 
             // For each snake check if it's dead
-            foreach (Snake snake in gameData.Snakes)
-                if (logic.CheckForDeath(gameData.Snakes, snake, gameData.GridSize))
+            foreach (Snake snake in GetAliveSnakes())
+                if (logic.CheckForDeath(GetAliveSnakes(), snake, gameData.GridSize))
                     snake.IsDead = true;
+
+            // Check for end game
+            if (GameHasEnded())
+            {
+                EndGame();
+                return;
+            }
 
             // Remove all dead snakes
 //            for (int i = gameData.Snakes.Count - 1; i >= 0; i--)
@@ -102,9 +114,14 @@ namespace SnakeServer.Networking
             isRunning = false;
         }
 
+        private bool GameHasEnded()
+        {
+            return GetAliveSnakes().Count <= 0;
+        }
+
         public void EndGame()
         {
-
+            // End game logic
         }
 
         public void Broadcast(JObject message)
@@ -129,6 +146,15 @@ namespace SnakeServer.Networking
                 if (id == snake.Id)
                     return snake;
             return null;
+        }
+
+        public List<Snake> GetAliveSnakes()
+        {
+            List<Snake> snakes = new List<Snake>();
+            foreach (Snake snake in gameData.Snakes)
+                if (!snake.IsDead)
+                    snakes.Add(snake);
+            return snakes;
         }
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
