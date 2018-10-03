@@ -11,11 +11,11 @@ namespace SharedSnakeGame.Networking
         {
             return new JObject
             {
+                {"command", "data/send" },
                 {"data", JsonConvert.SerializeObject(gamedata) }
             };
         }
         
-
         public static GameData DataReceived(string message)
         {
             dynamic json = ConvertToJson(message);
@@ -31,6 +31,7 @@ namespace SharedSnakeGame.Networking
         {
             return new JObject
             {
+                {"command", "direction/send" },
                 {"pointX", point.X },
                 {"pointY", point.Y }
             };
@@ -44,7 +45,7 @@ namespace SharedSnakeGame.Networking
         {
             return new JObject
             {
-                {"newTick", true }
+                {"command", "tick/send" },
             };
         }
 
@@ -52,8 +53,17 @@ namespace SharedSnakeGame.Networking
         {
             return new JObject
             {
+                {"command", "id/send" },
                 {"id", id },
                 {"data", JsonConvert.SerializeObject(gameData) }
+            };
+        }
+
+        public static JObject EndSend()
+        {
+            return new JObject
+            {
+                {"command", "end/send" },
             };
         }
     }

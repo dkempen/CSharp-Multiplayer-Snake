@@ -42,7 +42,6 @@ namespace CSharp_Multiplayer_Snake.Networking
         {
             StartGame();
             RunGame();
-            EndGame();
         }
 
         public void StartGame()
@@ -74,23 +73,33 @@ namespace CSharp_Multiplayer_Snake.Networking
             return gameData;
         }
 
-        private bool ReadTick()
+        private bool ReadEndGame()
         {
             string message = TcpHandler.ReadMessage(client);
-            dynamic json = JsonConvert.DeserializeObject<dynamic>(message);
-            return json.newTick;
+            JObject jObject = JObject.Parse(message);
+            string command = (string) jObject["command"];
+            switch (command)
+            {
+                case "tick/send":
+                    return false;
+                case "end/send":
+                    return true;
+            }
+            return false;
         }
 
         public void RunGame()
         {
             while (true)
             {
-                if (!ReadTick())
-                    continue;
-                if (gameData.Snakes.Count == 0)
+                // Check for end game or new tick
+                if (ReadEndGame())
                 {
-                    Debug.WriteLine("something");
+                    EndGame();
+                    return;
                 }
+
+                // Send direction
                 SendDirection();
                 waitDirectionChange = true;
                 gameData = ReadData();

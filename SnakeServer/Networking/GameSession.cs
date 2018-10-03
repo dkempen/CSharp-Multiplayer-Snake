@@ -29,8 +29,6 @@ namespace SnakeServer.Networking
         public void Run(object o)
         {
             StartGame();
-//            RunGameOneTick();
-//            EndGame();
         }
 
         public void StartGame()
@@ -65,7 +63,6 @@ namespace SnakeServer.Networking
 
             // Ask all clients for their snakes' direction
             Broadcast(TcpProtocol.TickSend());
-            Console.WriteLine("Send Tick");
 
             // Read all client directions
             ReadAll();
@@ -93,23 +90,18 @@ namespace SnakeServer.Networking
                 if (logic.CheckForDeath(GetAliveSnakes(), snake, gameData.GridSize))
                     snake.IsDead = true;
 
+            // Add the apples back that have been eaten
+            logic.AddApples(gameData, amountOfApples);
+
+            // Send updated gameData to the clients
+            Broadcast(TcpProtocol.DataSend(gameData));
+
             // Check for end game
             if (GameHasEnded())
             {
                 EndGame();
                 return;
             }
-
-            // Remove all dead snakes
-//            for (int i = gameData.Snakes.Count - 1; i >= 0; i--)
-//                if (gameData.Snakes[i].IsDead)
-//                    gameData.Snakes.Remove(gameData.Snakes[i]);
-
-            // Add the apples back that have been eaten
-            logic.AddApples(gameData, amountOfApples);
-
-            // Send updated gameData to the clients
-            Broadcast(TcpProtocol.DataSend(gameData));
 
             isRunning = false;
         }
@@ -122,6 +114,8 @@ namespace SnakeServer.Networking
         public void EndGame()
         {
             // End game logic
+            Broadcast(TcpProtocol.EndSend());
+            timer.Stop();
         }
 
         public void Broadcast(JObject message)
