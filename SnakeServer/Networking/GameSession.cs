@@ -8,6 +8,9 @@ using System.Drawing;
 using System.Threading;
 using System.Timers;
 using Timer = System.Timers.Timer;
+using System.Threading.Tasks;
+using System.Linq;
+using SnakeServer.Data;
 
 namespace SnakeServer.Networking
 {
@@ -36,9 +39,9 @@ namespace SnakeServer.Networking
             logic = new GameLogic();
 
             gameData = new GameData(16);
-            gameData.Snakes.Add(new Snake(new Point((int)(gameData.GridSize * 0.25), (int)(gameData.GridSize * 0.75)), 
+            gameData.Snakes.Add(new Snake(new Point((int)(gameData.GridSize * 0.25), (int)(gameData.GridSize * 0.75)),
                 Snake.Directions.Right, Color.ForestGreen, 1));
-            gameData.Snakes.Add(new Snake(new Point((int)(gameData.GridSize * 0.75), (int)(gameData.GridSize * 0.25)), 
+            gameData.Snakes.Add(new Snake(new Point((int)(gameData.GridSize * 0.75), (int)(gameData.GridSize * 0.25)),
                 Snake.Directions.Left, Color.DeepSkyBlue, 2));
             logic.AddApples(gameData, amountOfApples);
 
@@ -113,6 +116,9 @@ namespace SnakeServer.Networking
 
         public void EndGame()
         {
+            Highscore highscore = new Highscore();
+            highscore.CheckScores(gameData.Snakes[0].Body.Count,"DAC");
+
             // End game logic
             Broadcast(TcpProtocol.EndSend());
             timer.Stop();
@@ -124,14 +130,27 @@ namespace SnakeServer.Networking
                 client.Write(message);
         }
 
-        public void ReadAll()
+        public async Task ReadAll()
         {
-            foreach (ClientHandler client in clients)
+            Task[] tasks = new Task[clients.Count];
+
+            for (int i = 0; i < tasks.Length; i++)
+            {
+                tasks[i] = ReadClient(clients[i]);
+            }
+            await Task.WhenAll(tasks);
+        }
+
+        private Task ReadClient(ClientHandler client)
+        {
+            JObject jObject = client.Read();
+            lock (client)
             {
                 Snake snake = GetSnake(client.Id);
-                snake.Direction = TcpProtocol.DirectionReceived(client.Read());
+                snake.Direction = TcpProtocol.DirectionReceived(jObject);
                 snake.PreviousDirection = snake.Direction;
             }
+            return Task.FromResult<object>(null);
         }
 
         public Snake GetSnake(int id)

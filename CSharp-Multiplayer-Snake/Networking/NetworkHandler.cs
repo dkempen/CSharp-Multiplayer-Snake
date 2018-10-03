@@ -11,6 +11,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace CSharp_Multiplayer_Snake.Networking
 {
@@ -120,12 +121,21 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         }
 
+
         public Snake GetSnake(int id)
         {
-            foreach (Snake snake in gameData.Snakes)
-                if (id == snake.Id)
-                    return snake;
-            return null;
+            var list = gameData.Snakes;
+            var queryable = list.AsQueryable();
+
+
+            queryable = 
+                from snake in queryable
+                where snake.Id == id
+                select snake;
+
+            Snake selectedSnake = (Snake)queryable.First();
+
+            return selectedSnake;
         }
 
         public void KeyPressedHandler(KeyEventArgs e)

@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Highscore.cs" />
     <Compile Include="Game\GameLogic.cs" />
     <Compile Include="Networking\ClientHandler.cs" />
     <Compile Include="Networking\GameSession.cs" />
@@ -58,9 +59,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\SharedSnakeGame\SharedSnakeGame.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

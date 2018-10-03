@@ -38,16 +38,37 @@ namespace CSharp_Multiplayer_Snake
             return snake.GetUpdatedHeadPosition().Equals(apple.Position);
         }
 
+        // 
         public void AddApples(GameData gameData, int amountOfApples)
         {
             while (gameData.Apples.Count < amountOfApples)
             {
-                Point position = GenerateApplePosition(gameData.Snakes, gameData.Apples, gameData.GridSize);
+                GenerateApplePosition(gameData.Snakes, gameData.Apples, gameData.GridSize, out Point position);
                 if (position.X != -1 && position.Y != -1)
                     gameData.Apples.Add(new Apple(position));
                 else
                     return;
             }
+        }
+
+        private void GenerateApplePosition(List<Snake> snakes, List<Apple> apples, int gridSize, out Point position)
+        {
+            Random random = new Random();
+            List<int> randomCoord = Enumerable.Range(0, gridSize * gridSize).OrderBy(n => random.Next()).ToList();
+            for (int i = 0; i < randomCoord.Count; i++)
+            {
+                int x = randomCoord[i] / gridSize;
+                int y = randomCoord[i] % gridSize;
+                Point p = new Point(x, y);
+                bool possible = true;
+                if (CheckIfPositionIsPossible(snakes, apples, p))
+                {
+                    position = p;
+                    return;
+                }
+                
+            }
+            position = new Point(-1, -1);
         }
 
         public Point GenerateApplePosition(List<Snake> snakes, List<Apple> apples, int gridSize)
