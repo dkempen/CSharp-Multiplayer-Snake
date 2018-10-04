@@ -11,7 +11,8 @@ namespace CSharp_Multiplayer_Snake
 
         public Form()
         {
-            networkHandler = new NetworkHandler(this); 
+            networkHandler = new NetworkHandler(this);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             InitializeComponent();
         }
 

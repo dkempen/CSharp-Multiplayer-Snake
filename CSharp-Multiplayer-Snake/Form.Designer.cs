@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+using System.Windows.Forms;
 
 namespace CSharp_Multiplayer_Snake
 {
@@ -52,19 +52,21 @@ namespace CSharp_Multiplayer_Snake
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(720, 720);
             this.Controls.Add(this.gamePanel);
+            this.DoubleBuffered = true;
+            this.MaximizeBox = false;
             this.Name = "Form";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "Snake Mulitplayer by Daan van Kempen en Ian Vink 2018";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyPressedHandler);
             this.ResumeLayout(false);
             this.PerformLayout();
-            this.KeyDown += new KeyEventHandler(this.KeyPressedHandler);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel gamePanel;
+        private Panel gamePanel;
     }
 }
 
