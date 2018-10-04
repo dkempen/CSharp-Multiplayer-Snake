@@ -33,8 +33,8 @@ namespace CSharp_Multiplayer_Snake.Networking
             draw = Draw.GetInstance();
             draw.Form = form;
             draw.GameData = gameData;
-            IPAddress ip = IPAddress.Parse("127.0.0.1");
-            client = new TcpClient(ip.ToString(), 6969);
+            IPAddress ip = IPAddress.Parse("127.0.0.1");//"145.49.59.202");
+            client = new TcpClient(ip.ToString(), 6963);
 
             new Thread(Run).Start();
         }

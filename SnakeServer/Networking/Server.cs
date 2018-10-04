@@ -13,7 +13,7 @@ namespace SnakeServer.Networking
         public Server()
         {
             IPAddress localhost = IPAddress.Parse("127.0.0.1");
-            tcpListener = new TcpListener(localhost, 6969);
+            tcpListener = new TcpListener(localhost, 6963);
             tcpListener.Start();
 
             TcpClient previousClient = null;

@@ -11,6 +11,7 @@ using Timer = System.Timers.Timer;
 using System.Threading.Tasks;
 using System.Linq;
 using SnakeServer.Data;
+using Newtonsoft.Json;
 
 namespace SnakeServer.Networking
 {
@@ -118,6 +119,11 @@ namespace SnakeServer.Networking
         {
             Highscore highscore = new Highscore();
             highscore.CheckScores(gameData.Snakes[0].Body.Count,"DAC");
+            highscore.PrintHighScores();
+            highscore.WriteHighScores();
+           // string message = JsonConvert.SerializeObject(highscore);
+            //Console.WriteLine(message);
+
 
             // End game logic
             Broadcast(TcpProtocol.EndSend());
