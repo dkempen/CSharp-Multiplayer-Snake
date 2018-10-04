@@ -8,39 +8,80 @@ namespace SnakeServer.Data
 {
     class Highscore
     {
-        //  private List<Tuple<string, int>> highscores;
-
-        private SortedDictionary<int, string> highscores;
+        private List<Score> highscores;
         private const int maxListSize = 10;
 
         public Highscore()
         {
-            highscores = new SortedDictionary<int, string>();
-            highscores.Add(19, "AAA");
-            highscores.Add(33, "AAB");
-            highscores.Add(18, "AAC");
+            highscores = new List<Score>();
+
+            AddHighScore(new Score(19, "AAA"));
+            AddHighScore(new Score(33, "AAB"));
+            AddHighScore(new Score(18, "AAC"));
         }
 
         public void CheckScores(int score, string name)
         {
-            highscores.Add(score, name);
+            AddHighScore(new Score(score, name));
 
             if (highscores.Count > maxListSize)
-                highscores.Remove(highscores.First().Key);
+                highscores.Remove(highscores.Last());
 
-            Console.WriteLine(highscores.First());
+            PrintHighScores();
         }
+
+        private void AddHighScore(Score highScore)
+        {
+            highscores.Add(new Score(highScore.HighScore, highScore.Name));
+            highscores.Sort();
+        }
+
+        public void WriteHighScores()
+        {
+
+        }
+
+        public void ReadHighScores()
+        {
+
+        }
+
+        public void PrintHighScores()
+        {
+            String highscoreString = "";
+
+            foreach (Score score in highscores)
+            {
+                highscoreString += score.Name + ": " + score.HighScore + "\n";
+            }
+
+            Console.WriteLine(highscoreString);
+
+        }
+
+
+
+
+
+
+
 
 
         private class Score : IComparable
         {
-            private int score;
-            private string name;
+            public int HighScore { get; }
+            public string Name { get; }
+
+            public Score(int score, string name)
+            {
+                this.HighScore = score;
+                this.Name = name;
+            }
 
             public int CompareTo(Object s)
             {
-                Score scoreee = s as Score;
-                return this.score - scoreee.score;
+                Score secondScore = s as Score;
+                return secondScore.HighScore - this.HighScore;
             }
         }
     }
