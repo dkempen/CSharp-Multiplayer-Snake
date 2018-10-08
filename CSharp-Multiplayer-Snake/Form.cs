@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using CSharp_Multiplayer_Snake.Networking;
@@ -11,7 +12,7 @@ namespace CSharp_Multiplayer_Snake
     public partial class Form : System.Windows.Forms.Form
     {
         private NetworkHandler networkHandler;
-        private string name;
+        public string Name { get; set; }
 
         public Form()
         {
@@ -25,7 +26,7 @@ namespace CSharp_Multiplayer_Snake
             new Thread(ee =>
             {
                 Thread.Sleep(1000);
-                name = ShowNameInputDialog(ref input);
+                Name = ShowNameInputDialog(ref input);
                 networkHandler = new NetworkHandler(this);
             }).Start();
         }
@@ -39,6 +40,8 @@ namespace CSharp_Multiplayer_Snake
 
         private void KeyPressedHandler(object sender, KeyEventArgs e)
         {
+            if (networkHandler == null)
+                return;
             networkHandler.KeyPressedHandler(e);
         }
 
@@ -82,7 +85,7 @@ namespace CSharp_Multiplayer_Snake
             {
                 inputBox.ShowDialog();
                 input = textBox.Text;
-                if (input.Length == 3)
+                if (input.Length == 3 && Regex.IsMatch(input, @"^[a-zA-Z]+$"))
                     return input.ToUpper();
             }
         }

@@ -9,12 +9,12 @@ namespace SnakeServer.Networking
     {
         private TcpClient client;
         public int Id { get; }
+        public string Name { get; set; }
 
         public ClientHandler(TcpClient client, int id)
         {
             this.client = client;
             Id = id;
-
         }
 
         public void Write(JObject message)

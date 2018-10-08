@@ -51,6 +51,7 @@ namespace CSharp_Multiplayer_Snake.Networking
         {
             IPAddress ip = IPAddress.Parse("127.0.0.1");//"145.49.59.202");
             client = new TcpClient(ip.ToString(), 6963);
+            SendName();
             Tuple<int, GameData> tuple = ReadId();
             id = tuple.Item1;
             gameData = tuple.Item2;
@@ -76,6 +77,14 @@ namespace CSharp_Multiplayer_Snake.Networking
             foreach (Snake snake in gameData.Snakes)
                 snake.Body.RemoveFirst();
             return gameData;
+        }
+
+        private Highscore ReadHighscore()
+        {
+            string received = TcpHandler.ReadMessage(client);
+            string data = JObject.Parse(received)["data"].ToString();
+            Highscore highscore = JsonConvert.DeserializeObject<Highscore>(data);
+            return highscore;
         }
 
         private bool ReadEndGame()
@@ -120,18 +129,22 @@ namespace CSharp_Multiplayer_Snake.Networking
             TcpHandler.WriteMessage(client, TcpProtocol.DirectionSend(GetSnake(id).Direction));
         }
 
+        private void SendName()
+        {
+            TcpHandler.WriteMessage(client, TcpProtocol.NameSend(form.Name));
+        }
+
         public void EndGame()
         {
             // Recieve highscores
-
-            // Send name and score
+            Highscore highscore = ReadHighscore();
 
             // Rejoin a lobby
-            Highscore highScore = Highscore.ReadHighScores();
-            highScore.AddTestData();
             int score = GetSnake(id).Body.Count;
-            Form.ShowHighScoreDialog(highScore, score);
+            Form.ShowHighScoreDialog(highscore, score);
             client.Close();
+            draw.GameData = null;
+            draw.DrawGame();
         }
 
         public Snake GetSnake(int id)
