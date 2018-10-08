@@ -11,6 +11,7 @@ namespace SnakeServer.Networking
         private TcpClient client;
         public int Id { get; }
         public bool Disconnected { get; set; }
+        public string Name { get; set; }
 
         public ClientHandler(TcpClient client, int id)
         {

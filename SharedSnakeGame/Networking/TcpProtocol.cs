@@ -1,7 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharedSnakeGame.Game;
 using System.Drawing;
+using System.Dynamic;
+using Newtonsoft.Json.Converters;
+using SharedSnakeGame.Data;
 
 namespace SharedSnakeGame.Networking
 {
@@ -59,20 +64,29 @@ namespace SharedSnakeGame.Networking
             };
         }
 
-//        public static JObject HighscoresSend(Highscore highscore)
-//        {
-//            return new JObject
-//            {
-//                {"command", "highscores/send" },
-//                {"data", JsonConvert.SerializeObject(highscore) }
-//            };
-//        }
+        public static JObject NameSend(string name)
+        {
+            return new JObject
+            {
+                {"command", "name/send" },
+                {"name", name }
+            };
+        }
 
         public static JObject EndSend()
         {
             return new JObject
             {
-                {"command", "end/send" },
+                {"command", "end/send" }
+            };
+        }
+
+        public static JObject HighscoreSend(Highscore highscore)
+        {
+            return new JObject
+            {
+                {"command", "highscore/send" },
+                {"data", JsonConvert.SerializeObject(highscore) }
             };
         }
     }

@@ -12,6 +12,7 @@ namespace CSharp_Multiplayer_Snake.Visuals
 
         public GameData GameData { get; set; }
         public Form Form { get; set; }
+
         private int gridSize;
 
         private readonly Color AppleColor = Color.Firebrick;
@@ -26,13 +27,24 @@ namespace CSharp_Multiplayer_Snake.Visuals
         internal void DrawGame(Graphics g, Panel panel)
         {
             if (GameData == null)
+            {
+                DrawWaitingScreen(g, panel);
                 return;
+            }
             gridSize = panel.Size.Width / GameData.GridSize;
             DrawBackgroud(panel);
             foreach (Snake snake in GetAliveSnakes())
                 DrawSnake(g, snake);
             foreach (Apple apple in GameData.Apples)
                 DrawApple(g, apple);
+        }
+
+        private void DrawWaitingScreen(Graphics g, Panel panel)
+        {
+            DrawBackgroud(panel);
+            using (Font font = new Font("Courier New", 20))
+                TextRenderer.DrawText(g, "Please wait until\na player is found", 
+                    font, new Point(panel.Width / 2 - 140, panel.Height / 2 - 50), Color.Ivory);
         }
 
         public void DrawGame()

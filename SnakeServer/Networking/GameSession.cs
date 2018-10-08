@@ -44,6 +44,8 @@ namespace SnakeServer.Networking
                 Snake.Directions.Left, Color.DeepSkyBlue, 2));
             logic.AddApples(gameData, amountOfApples);
 
+            ReadAll(false);
+
             foreach (ClientHandler client in clients)
                 client.Write(TcpProtocol.IdSend(gameData, client.Id));
 
@@ -69,7 +71,7 @@ namespace SnakeServer.Networking
 
 
             // Read all client directions
-            ReadAll();
+            ReadAll(true);
 
 
             //Check if a client has been disconnected
@@ -125,22 +127,18 @@ namespace SnakeServer.Networking
             // Stop the game timer
             timer.Stop();
 
-            // Get and send previous highscores
-            //            Highscore highscore = Highscore.ReadHighScores();
-            //            Broadcast(TcpProtocol.HighscoresSend(highscore));
-
-            // Read all names
-
+            // Get previous highscores
+            Highscore highscore = Highscore.ReadHighScores();
+            
             // Update highscores
-            Highscore highscore = new Highscore();
-            highscore.CheckScores(gameData.Snakes[0].Body.Count, "TST");
-            highscore.PrintHighScores();
+            foreach (ClientHandler client in clients)
+                highscore.AddHighScore(GetSnake(client.Id).Body.Count, client.Name);
             highscore.WriteHighScores();
-            Highscore newHighscore = Highscore.ReadHighScores();
-            newHighscore.PrintHighScores();
-
-            // Send Endpacket and stop timer
+            
+            // Send Endpacket and highscores
             Broadcast(TcpProtocol.EndSend());
+            foreach (ClientHandler client in clients)
+                client.Write(TcpProtocol.HighscoreSend(highscore));
         }
 
         public void Broadcast(JObject message)
@@ -164,11 +162,14 @@ namespace SnakeServer.Networking
         {
             Task[] tasks = new Task[clients.Count];
             for (int i = 0; i < tasks.Length; i++)
-                tasks[i] = ReadClient(clients[i]);
+                if (readDirection)
+                    tasks[i] = ReadClientDirection(clients[i]);
+                else
+                    tasks[i] = ReadClientName(clients[i]);
             await Task.WhenAll(tasks);
         }
 
-        private Task ReadClient(ClientHandler client)
+        private Task ReadClientDirection(ClientHandler client)
         {
             JObject jObject = client.Read();
             lock (client)
@@ -176,6 +177,16 @@ namespace SnakeServer.Networking
                 Snake snake = GetSnake(client.Id);
                 snake.Direction = TcpProtocol.DirectionReceived(jObject);
                 snake.PreviousDirection = snake.Direction;
+            }
+            return Task.FromResult<object>(null);
+        }
+
+        private Task ReadClientName(ClientHandler client)
+        {
+            JObject jObject = client.Read();
+            lock (client)
+            {
+                client.Name = (string) jObject["name"];
             }
             return Task.FromResult<object>(null);
         }
