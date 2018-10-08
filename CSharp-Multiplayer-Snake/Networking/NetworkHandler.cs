@@ -19,7 +19,7 @@ namespace CSharp_Multiplayer_Snake.Networking
     class NetworkHandler
     {
         private Form form;
-        private TcpClient Client { get; set; }
+        private TcpClient client { get; set; }
         private int id;
         private Draw draw;
         public bool Disconnected { get; set; }
@@ -51,7 +51,7 @@ namespace CSharp_Multiplayer_Snake.Networking
         public void StartGame()
         {
             IPAddress ip = IPAddress.Parse("127.0.0.1");//"145.49.59.202");
-            Client = new TcpClient(ip.ToString(), 6963);
+            client = new TcpClient(ip.ToString(), 6963);
             Tuple<int, GameData> tuple = ReadId();
             id = tuple.Item1;
             Disconnected = false;
@@ -61,7 +61,7 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         private Tuple<int, GameData> ReadId()
         {
-            string received = TcpHandler.ReadMessage(Client);
+            string received = TcpHandler.ReadMessage(client);
             JObject jObject = JObject.Parse(received);
             string data = (string) jObject["data"];
             GameData gameData = JsonConvert.DeserializeObject<GameData>(data);
@@ -70,7 +70,7 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         private GameData ReadData()
         {
-            string received = TcpHandler.ReadMessage(Client);
+            string received = TcpHandler.ReadMessage(client);
             JObject jObject = JObject.Parse(received);
             string data = (string)jObject["data"];
             GameData gameData = JsonConvert.DeserializeObject<GameData>(data);
@@ -82,7 +82,7 @@ namespace CSharp_Multiplayer_Snake.Networking
         
         private bool ReadEndGame()
         {
-            string message = TcpHandler.ReadMessage(Client);
+            string message = TcpHandler.ReadMessage(client);
             JObject jObject = JObject.Parse(message);
             string command = (string) jObject["command"];
             switch (command)
@@ -101,7 +101,7 @@ namespace CSharp_Multiplayer_Snake.Networking
             {
                 if (Disconnected)
                 {
-                    Client.Close();
+                    client.Close();
                     break;
                 }
 
@@ -124,7 +124,7 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         private void SendDirection()
         {
-            TcpHandler.WriteMessage(Client, TcpProtocol.DirectionSend(GetSnake(id).Direction));
+            TcpHandler.WriteMessage(client, TcpProtocol.DirectionSend(GetSnake(id).Direction));
         }
 
         public void EndGame()
