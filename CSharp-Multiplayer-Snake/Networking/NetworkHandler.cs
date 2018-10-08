@@ -19,9 +19,10 @@ namespace CSharp_Multiplayer_Snake.Networking
     class NetworkHandler
     {
         private Form form;
-        private TcpClient client;
+        private TcpClient Client { get; set; }
         private int id;
         private Draw draw;
+        public bool Disconnected { get; set; }
 
         public const int amountOfApples = 2;
         public const int fps = 6;
@@ -40,7 +41,7 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         public void Run(object o)
         {
-            while (true)
+            while (!Disconnected)
             {
                 StartGame();
                 RunGame();
@@ -50,16 +51,17 @@ namespace CSharp_Multiplayer_Snake.Networking
         public void StartGame()
         {
             IPAddress ip = IPAddress.Parse("127.0.0.1");//"145.49.59.202");
-            client = new TcpClient(ip.ToString(), 6963);
+            Client = new TcpClient(ip.ToString(), 6963);
             Tuple<int, GameData> tuple = ReadId();
             id = tuple.Item1;
+            Disconnected = false;
             gameData = tuple.Item2;
             draw.GameData = gameData;
         }
 
         private Tuple<int, GameData> ReadId()
         {
-            string received = TcpHandler.ReadMessage(client);
+            string received = TcpHandler.ReadMessage(Client);
             JObject jObject = JObject.Parse(received);
             string data = (string) jObject["data"];
             GameData gameData = JsonConvert.DeserializeObject<GameData>(data);
@@ -68,7 +70,7 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         private GameData ReadData()
         {
-            string received = TcpHandler.ReadMessage(client);
+            string received = TcpHandler.ReadMessage(Client);
             JObject jObject = JObject.Parse(received);
             string data = (string)jObject["data"];
             GameData gameData = JsonConvert.DeserializeObject<GameData>(data);
@@ -77,10 +79,10 @@ namespace CSharp_Multiplayer_Snake.Networking
                 snake.Body.RemoveFirst();
             return gameData;
         }
-
+        
         private bool ReadEndGame()
         {
-            string message = TcpHandler.ReadMessage(client);
+            string message = TcpHandler.ReadMessage(Client);
             JObject jObject = JObject.Parse(message);
             string command = (string) jObject["command"];
             switch (command)
@@ -97,13 +99,18 @@ namespace CSharp_Multiplayer_Snake.Networking
         {
             while (true)
             {
+                if (Disconnected)
+                {
+                    Client.Close();
+                    break;
+                }
+
                 // Check for end game or new tick
                 if (ReadEndGame())
                 {
                     EndGame();
                     return;
                 }
-
                 // Send direction
                 SendDirection();
                 waitDirectionChange = true;
@@ -117,7 +124,7 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         private void SendDirection()
         {
-            TcpHandler.WriteMessage(client, TcpProtocol.DirectionSend(GetSnake(id).Direction));
+            TcpHandler.WriteMessage(Client, TcpProtocol.DirectionSend(GetSnake(id).Direction));
         }
 
         public void EndGame()

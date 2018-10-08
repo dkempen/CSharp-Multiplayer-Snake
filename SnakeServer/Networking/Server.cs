@@ -23,7 +23,7 @@ namespace SnakeServer.Networking
                 Console.WriteLine("Waiting for client..");
                 TcpClient client = tcpListener.AcceptTcpClient();
                 
-                if (previousClient == null)
+                if (previousClient == null || !previousClient.Connected)
                 {
                     previousClient = client;
                     Console.WriteLine("Found one client");
@@ -35,6 +35,7 @@ namespace SnakeServer.Networking
                     new Thread(gameSession.Run).Start();
 
                     previousClient = null;
+                    client = null;
                 }
             }
         }

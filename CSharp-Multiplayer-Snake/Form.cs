@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -17,6 +18,7 @@ namespace CSharp_Multiplayer_Snake
         {
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             InitializeComponent();
+            this.FormClosed += new FormClosedEventHandler(Form_FormClosed);
         }
 
         private void Form_Load(object sender, EventArgs e)
@@ -40,6 +42,13 @@ namespace CSharp_Multiplayer_Snake
         private void KeyPressedHandler(object sender, KeyEventArgs e)
         {
             networkHandler.KeyPressedHandler(e);
+        }
+        
+        
+
+        void Form_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            networkHandler.Disconnected = true;
         }
 
         private static string ShowNameInputDialog(ref string input)
