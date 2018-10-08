@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharedSnakeGame.Networking;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -22,7 +23,7 @@ namespace SnakeServer.Networking
             {
                 Console.WriteLine("Waiting for client..");
                 TcpClient client = tcpListener.AcceptTcpClient();
-                
+                TcpHandler.WriteMessage(client,new Newtonsoft.Json.Linq.JObject()); 
                 if (previousClient == null || !previousClient.Connected)
                 {
                     previousClient = client;

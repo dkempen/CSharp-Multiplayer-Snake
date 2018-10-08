@@ -158,7 +158,7 @@ namespace SnakeServer.Networking
         }
 
 
-        public async Task ReadAll()
+        public async Task ReadAll(bool readDirection)
         {
             Task[] tasks = new Task[clients.Count];
             for (int i = 0; i < tasks.Length; i++)

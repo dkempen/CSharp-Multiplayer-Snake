@@ -12,30 +12,30 @@ namespace SharedSnakeGame.Data
     [Serializable]
     public class Highscore
     {
-        public List<Tuple<int, string>> highscores { get; set; }
+        public List<Tuple<int, string>> Highscores { get; set; }
         private const int maxListSize = 10;
 
         public Highscore()
         {
-            highscores = new List<Tuple<int, string>>();
+            Highscores = new List<Tuple<int, string>>();
         }
 
         private void CheckScores()
         {
-            if (highscores.Count > maxListSize)
-                highscores.Remove(highscores.Last());
+            if (Highscores.Count > maxListSize)
+                Highscores.Remove(Highscores.Last());
         }
 
         public void AddTestData()
         {
-            for (int i = highscores.Count; i < maxListSize; i++)
+            for (int i = Highscores.Count; i < maxListSize; i++)
                 AddHighScore(i, "AAA");
         }
 
         public void AddHighScore(int score, string name)
         {
-            highscores.Add(Tuple.Create(score, name));
-            highscores.Sort((x, y) => y.Item1.CompareTo(x.Item1));
+            Highscores.Add(Tuple.Create(score, name));
+            Highscores.Sort((x, y) => y.Item1.CompareTo(x.Item1));
             CheckScores();
         }
 
@@ -76,7 +76,7 @@ namespace SharedSnakeGame.Data
         public string ToString()
         {
             var highScoreString = "";
-            foreach (Tuple<int, string> score in highscores)
+            foreach (Tuple<int, string> score in Highscores)
                 highScoreString += score.Item2 + ":   " + score.Item1 + "\n";
             return highScoreString;
         }

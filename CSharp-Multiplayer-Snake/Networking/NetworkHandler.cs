@@ -50,9 +50,18 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         public void StartGame()
         {
-            IPAddress ip = IPAddress.Parse("127.0.0.1");//"145.49.59.202");
+            IPAddress ip = IPAddress.Parse("127.0.0.1");//IPAddress.Parse("145.49.59.202");
             client = new TcpClient(ip.ToString(), 6963);
             SendName();
+
+            while (client.Available <= 0)
+            {
+                if (Disconnected) {
+                    Console.WriteLine("");
+                return;
+            }
+            }
+
             Tuple<int, GameData> tuple = ReadId();
             id = tuple.Item1;
             Disconnected = false;
@@ -64,7 +73,7 @@ namespace CSharp_Multiplayer_Snake.Networking
         {
             string received = TcpHandler.ReadMessage(client);
             JObject jObject = JObject.Parse(received);
-            string data = (string) jObject["data"];
+            string data = (string)jObject["data"];
             GameData gameData = JsonConvert.DeserializeObject<GameData>(data);
             return Tuple.Create((int)jObject["id"], gameData);
         }
@@ -89,12 +98,12 @@ namespace CSharp_Multiplayer_Snake.Networking
             return highscore;
         }
 
-        
+
         private bool ReadEndGame()
         {
             string message = TcpHandler.ReadMessage(client);
             JObject jObject = JObject.Parse(message);
-            string command = (string) jObject["command"];
+            string command = (string)jObject["command"];
             switch (command)
             {
                 case "tick/send":
@@ -160,7 +169,7 @@ namespace CSharp_Multiplayer_Snake.Networking
             var list = gameData.Snakes;
             var queryable = list.AsQueryable();
 
-            queryable = 
+            queryable =
                 from snake in queryable
                 where snake.Id == id
                 select snake;
@@ -177,7 +186,7 @@ namespace CSharp_Multiplayer_Snake.Networking
             Snake snake = GetSnake(id);
             if (snake == null)
                 return;
-            
+
             // Only appect the first new direction
             Point previousDirection = snake.PreviousDirection;
             if (previousDirection != snake.Direction)
