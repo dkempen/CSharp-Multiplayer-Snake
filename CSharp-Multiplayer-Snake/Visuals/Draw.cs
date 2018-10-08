@@ -38,7 +38,7 @@ namespace CSharp_Multiplayer_Snake.Visuals
         public void DrawGame()
         {
             try { Form.Invoke((MethodInvoker)delegate { Form.Refresh(); }); }
-            catch (ObjectDisposedException e) { }
+            catch (Exception e) { }
         }
 
         private void DrawSnake(Graphics g, Snake snake)

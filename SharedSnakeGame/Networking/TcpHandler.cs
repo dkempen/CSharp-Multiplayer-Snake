@@ -20,6 +20,12 @@ namespace SharedSnakeGame.Networking
 
         public static string ReadMessage(TcpClient client)
         {
+            if (!client.Connected)
+            {
+                Console.WriteLine("Client not connected");
+                throw new Exception();
+            }
+            
             NetworkStream stream = client.GetStream();
             byte[] lengthBytes = new Byte[4];
             StringBuilder message = new StringBuilder();
@@ -36,7 +42,7 @@ namespace SharedSnakeGame.Networking
                     message.AppendFormat("{0}", Encoding.UTF8.GetString(receiveBuffer, 0, numberOfBytesRead));
                 } while (totalSizeRead < length);
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 Console.WriteLine("Client has disconnected");
                 throw e;

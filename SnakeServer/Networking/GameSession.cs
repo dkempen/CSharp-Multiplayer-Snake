@@ -66,8 +66,15 @@ namespace SnakeServer.Networking
             // Ask all clients for their snakes' direction
             Broadcast(TcpProtocol.TickSend());
 
+
+
             // Read all client directions
             ReadAll();
+
+
+            //Check if a client has been disconnected
+            CheckIfDisconnected();
+
 
             //Logique
 
@@ -126,7 +133,7 @@ namespace SnakeServer.Networking
 
             // Update highscores
             Highscore highscore = new Highscore();
-            highscore.CheckScores(gameData.Snakes[0].Body.Count, "DVK");
+            highscore.CheckScores(gameData.Snakes[0].Body.Count, "TST");
             highscore.PrintHighScores();
             highscore.WriteHighScores();
             Highscore newHighscore = Highscore.ReadHighScores();
@@ -141,6 +148,17 @@ namespace SnakeServer.Networking
             foreach (ClientHandler client in clients)
                 client.Write(message);
         }
+
+        private void CheckIfDisconnected()
+        {
+            foreach (ClientHandler client in clients)
+                if (client.Disconnected)
+                    GetSnake(client.Id).IsDead = true;
+            Console.WriteLine("Before: " + clients.Count);
+            clients.RemoveAll(elem => elem.Disconnected == true);
+            Console.WriteLine("After: " + clients.Count);
+        }
+
 
         public async Task ReadAll()
         {
