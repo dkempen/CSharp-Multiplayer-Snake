@@ -52,17 +52,33 @@ namespace CSharp_Multiplayer_Snake.Networking
         {
             IPAddress ip = IPAddress.Parse("127.0.0.1");//IPAddress.Parse("145.49.59.202");
             client = new TcpClient(ip.ToString(), 6963);
-            SendName();
+            
+                    
 
             while (client.Available <= 0)
             {
-                if (Disconnected) {
+                if (Disconnected)
+                {
                     Console.WriteLine("");
-                return;
-            }
+                    return;
+                }
             }
 
-            Tuple<int, GameData> tuple = ReadId();
+            string received = TcpHandler.ReadMessage(client);
+            JObject jObject = JObject.Parse(received);
+            string command = (string)jObject["command"];
+            Tuple<int, GameData> tuple;
+
+            if (command != "disconnect/send")
+                tuple = Tuple.Create((int)jObject["id"], JsonConvert.DeserializeObject<GameData>((string)jObject["data"]));
+            else
+            {
+                TcpHandler.WriteMessage(client, new JObject());
+                
+                tuple = ReadId();
+            }
+            SendName();
+
             id = tuple.Item1;
             Disconnected = false;
             gameData = tuple.Item2;
@@ -121,7 +137,7 @@ namespace CSharp_Multiplayer_Snake.Networking
                 if (Disconnected)
                 {
                     client.Close();
-                    break;
+                    return;
                 }
 
                 // Check for end game or new tick

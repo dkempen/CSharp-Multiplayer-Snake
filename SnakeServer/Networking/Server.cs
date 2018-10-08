@@ -23,22 +23,55 @@ namespace SnakeServer.Networking
             {
                 Console.WriteLine("Waiting for client..");
                 TcpClient client = tcpListener.AcceptTcpClient();
-                TcpHandler.WriteMessage(client,new Newtonsoft.Json.Linq.JObject()); 
-                if (previousClient == null || !previousClient.Connected)
+
+                if (previousClient == null)
                 {
                     previousClient = client;
                     Console.WriteLine("Found one client");
                 }
                 else
                 {
+
+                    if (!CheckForPrevClient(previousClient))
+                    {
+                        previousClient = client;
+                        continue;
+                    }
+
+                    //Eerst checken of previousClient nog leeft
                     Console.WriteLine("Found 2 clients, creating session..");
-                    GameSession gameSession = new GameSession(new List<ClientHandler> {new ClientHandler(previousClient, 1), new ClientHandler(client, 2) });
+                    GameSession gameSession = new GameSession(new List<ClientHandler> { new ClientHandler(previousClient, 1), new ClientHandler(client, 2) });
                     new Thread(gameSession.Run).Start();
 
                     previousClient = null;
                     client = null;
+
                 }
             }
+        }
+
+        private bool CheckForPrevClient(TcpClient prevClient)
+        {
+            TcpHandler.WriteMessage(prevClient, TcpProtocol.CheckForDisconnectSend());
+
+            int waitTimeInMillis = 500;
+            bool noResponsePrevClient = false;
+
+            long startTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            while (prevClient.Available <= 0)
+            {
+                long currentTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+                if (currentTime - startTime >= waitTimeInMillis)
+                {
+                    noResponsePrevClient = true;
+                    break;
+                }
+            }
+            if (noResponsePrevClient)
+                return false;
+
+            TcpHandler.ReadMessage(prevClient);
+            return true;
         }
     }
 }

@@ -44,10 +44,11 @@ namespace SnakeServer.Networking
                 Snake.Directions.Left, Color.DeepSkyBlue, 2));
             logic.AddApples(gameData, amountOfApples);
 
-            ReadAll(false);
-
             foreach (ClientHandler client in clients)
                 client.Write(TcpProtocol.IdSend(gameData, client.Id));
+            
+            ReadAll(false);
+                     
 
             // Start timer that calls a game tick update
             timer = new Timer();
@@ -126,7 +127,7 @@ namespace SnakeServer.Networking
         {
             // Stop the game timer
             timer.Stop();
-
+            
             // Get previous highscores
             Highscore highscore = Highscore.ReadHighScores();
             
@@ -152,9 +153,9 @@ namespace SnakeServer.Networking
             foreach (ClientHandler client in clients)
                 if (client.Disconnected)
                     GetSnake(client.Id).IsDead = true;
-            Console.WriteLine("Before: " + clients.Count);
+           // Console.WriteLine("Before: " + clients.Count);
             clients.RemoveAll(elem => elem.Disconnected == true);
-            Console.WriteLine("After: " + clients.Count);
+           // Console.WriteLine("After: " + clients.Count);
         }
 
 

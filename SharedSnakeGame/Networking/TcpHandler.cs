@@ -15,7 +15,15 @@ namespace SharedSnakeGame.Networking
             byte[] bytesToSend = new byte[bytesLength.Length + bytesJson.Length];
             Array.Copy(bytesLength, bytesToSend, bytesLength.Length);
             Array.Copy(bytesJson, 0, bytesToSend, 4, bytesJson.Length);
-            client.GetStream().Write(bytesToSend, 0, bytesToSend.Length);
+
+            try
+            {
+                client.GetStream().Write(bytesToSend, 0, bytesToSend.Length);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public static string ReadMessage(TcpClient client)
@@ -25,7 +33,7 @@ namespace SharedSnakeGame.Networking
                 Console.WriteLine("Client not connected");
                 throw new Exception();
             }
-            
+
             NetworkStream stream = client.GetStream();
             byte[] lengthBytes = new Byte[4];
             StringBuilder message = new StringBuilder();

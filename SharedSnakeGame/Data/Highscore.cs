@@ -28,8 +28,10 @@ namespace SharedSnakeGame.Data
 
         public void AddTestData()
         {
+            Highscores.Clear();
+            
             for (int i = Highscores.Count; i < maxListSize; i++)
-                AddHighScore(i, "AAA");
+                AddHighScore(i, "NUB");
         }
 
         public void AddHighScore(int score, string name)

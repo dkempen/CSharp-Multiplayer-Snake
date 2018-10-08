@@ -89,5 +89,14 @@ namespace SharedSnakeGame.Networking
                 {"data", JsonConvert.SerializeObject(highscore) }
             };
         }
+
+        public static JObject CheckForDisconnectSend()
+        {
+            return new JObject
+            {
+                {"command", "disconnect/send" }
+            };
+        }
+
     }
 }
