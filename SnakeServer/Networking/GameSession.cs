@@ -11,6 +11,7 @@ using Timer = System.Timers.Timer;
 using System.Threading.Tasks;
 using System.Linq;
 using SnakeServer.Data;
+using Newtonsoft.Json;
 
 namespace SnakeServer.Networking
 {
@@ -116,10 +117,21 @@ namespace SnakeServer.Networking
 
         public void EndGame()
         {
-            Highscore highscore = new Highscore();
-            highscore.CheckScores(gameData.Snakes[0].Body.Count,"DAC");
+            // Get and send previous highscores
+//            Highscore highscore = Highscore.ReadHighScores();
+//            Broadcast(TcpProtocol.HighscoresSend(highscore));
 
-            // End game logic
+            // Read all names
+
+            // Update highscores
+            Highscore highscore = new Highscore();
+            highscore.CheckScores(gameData.Snakes[0].Body.Count, "DVK");
+            highscore.PrintHighScores();
+            highscore.WriteHighScores();
+            Highscore newHighscore = Highscore.ReadHighScores();
+            newHighscore.PrintHighScores();
+
+            // Send Endpacket and stop timer
             Broadcast(TcpProtocol.EndSend());
             timer.Stop();
         }
@@ -133,11 +145,8 @@ namespace SnakeServer.Networking
         public async Task ReadAll()
         {
             Task[] tasks = new Task[clients.Count];
-
             for (int i = 0; i < tasks.Length; i++)
-            {
                 tasks[i] = ReadClient(clients[i]);
-            }
             await Task.WhenAll(tasks);
         }
 

@@ -33,20 +33,23 @@ namespace CSharp_Multiplayer_Snake.Networking
             draw = Draw.GetInstance();
             draw.Form = form;
             draw.GameData = gameData;
-            IPAddress ip = IPAddress.Parse("127.0.0.1");
-            client = new TcpClient(ip.ToString(), 6969);
 
             new Thread(Run).Start();
         }
 
         public void Run(object o)
         {
-            StartGame();
-            RunGame();
+            while (true)
+            {
+                StartGame();
+                RunGame();
+            }
         }
 
         public void StartGame()
         {
+            IPAddress ip = IPAddress.Parse("127.0.0.1");//"145.49.59.202");
+            client = new TcpClient(ip.ToString(), 6963);
             Tuple<int, GameData> tuple = ReadId();
             id = tuple.Item1;
             gameData = tuple.Item2;
@@ -118,23 +121,25 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         public void EndGame()
         {
+            // Recieve highscores
 
+            // Send name and score
+
+            // Rejoin a lobby
+            client.Close();
         }
-
 
         public Snake GetSnake(int id)
         {
             var list = gameData.Snakes;
             var queryable = list.AsQueryable();
 
-
             queryable = 
                 from snake in queryable
                 where snake.Id == id
                 select snake;
 
-            Snake selectedSnake = (Snake)queryable.First();
-
+            Snake selectedSnake = queryable.First();
             return selectedSnake;
         }
 

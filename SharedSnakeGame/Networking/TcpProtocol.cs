@@ -59,6 +59,15 @@ namespace SharedSnakeGame.Networking
             };
         }
 
+//        public static JObject HighscoresSend(Highscore highscore)
+//        {
+//            return new JObject
+//            {
+//                {"command", "highscores/send" },
+//                {"data", JsonConvert.SerializeObject(highscore) }
+//            };
+//        }
+
         public static JObject EndSend()
         {
             return new JObject
