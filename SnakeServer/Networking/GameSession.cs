@@ -9,9 +9,7 @@ using System.Threading;
 using System.Timers;
 using Timer = System.Timers.Timer;
 using System.Threading.Tasks;
-using System.Linq;
-using SnakeServer.Data;
-using Newtonsoft.Json;
+using SharedSnakeGame.Data;
 
 namespace SnakeServer.Networking
 {
@@ -117,9 +115,12 @@ namespace SnakeServer.Networking
 
         public void EndGame()
         {
+            // Stop the game timer
+            timer.Stop();
+
             // Get and send previous highscores
-//            Highscore highscore = Highscore.ReadHighScores();
-//            Broadcast(TcpProtocol.HighscoresSend(highscore));
+            //            Highscore highscore = Highscore.ReadHighScores();
+            //            Broadcast(TcpProtocol.HighscoresSend(highscore));
 
             // Read all names
 
@@ -133,7 +134,6 @@ namespace SnakeServer.Networking
 
             // Send Endpacket and stop timer
             Broadcast(TcpProtocol.EndSend());
-            timer.Stop();
         }
 
         public void Broadcast(JObject message)

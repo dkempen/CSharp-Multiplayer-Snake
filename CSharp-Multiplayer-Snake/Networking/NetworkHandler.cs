@@ -12,6 +12,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using SharedSnakeGame.Data;
 
 namespace CSharp_Multiplayer_Snake.Networking
 {
@@ -126,6 +127,10 @@ namespace CSharp_Multiplayer_Snake.Networking
             // Send name and score
 
             // Rejoin a lobby
+            Highscore highScore = Highscore.ReadHighScores();
+            highScore.AddTestData();
+            int score = GetSnake(id).Body.Count;
+            Form.ShowHighScoreDialog(highScore, score);
             client.Close();
         }
 
@@ -145,6 +150,8 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         public void KeyPressedHandler(KeyEventArgs e)
         {
+            if (gameData == null)
+                return;
             while (waitDirectionChange) { }
             Snake snake = GetSnake(id);
             if (snake == null)

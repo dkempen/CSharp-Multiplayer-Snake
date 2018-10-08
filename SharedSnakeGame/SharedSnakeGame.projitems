@@ -9,6 +9,7 @@
     <Import_RootNamespace>SharedSnakeGame</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Highscore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Game\Apple.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Game\GameData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Game\GameObject.cs" />

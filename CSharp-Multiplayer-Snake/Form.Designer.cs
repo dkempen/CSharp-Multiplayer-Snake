@@ -57,7 +57,7 @@ namespace CSharp_Multiplayer_Snake
             this.Name = "Form";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Snake Mulitplayer by Daan van Kempen en Ian Vink 2018";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.Form_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyPressedHandler);
             this.ResumeLayout(false);
             this.PerformLayout();

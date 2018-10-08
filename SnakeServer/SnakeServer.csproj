@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Highscore.cs" />
     <Compile Include="Game\GameLogic.cs" />
     <Compile Include="Networking\ClientHandler.cs" />
     <Compile Include="Networking\GameSession.cs" />
