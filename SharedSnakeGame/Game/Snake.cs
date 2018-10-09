@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
@@ -11,7 +11,7 @@ namespace CSharp_Multiplayer_Snake
         public Point PreviousDirection { get; set; }
         public Point Direction { get; set; }
         public bool IsDead { get; set; }
-        public readonly Color color;
+        public Color color;
         public int Id;
 
         public Snake(Point headPosition, Point direction, Color color, int id)

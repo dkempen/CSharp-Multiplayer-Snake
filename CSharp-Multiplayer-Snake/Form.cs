@@ -14,6 +14,7 @@ namespace CSharp_Multiplayer_Snake
     {
         private NetworkHandler networkHandler;
         public string Name { get; set; }
+        public Color Color { get; set; }
 
         public Form()
         {
@@ -29,6 +30,7 @@ namespace CSharp_Multiplayer_Snake
             {
                 Thread.Sleep(1000);
                 Name = ShowNameInputDialog(ref input);
+                Color = ShowColorInputDialog();
                 networkHandler = new NetworkHandler(this);
             }).Start();
         }
@@ -96,6 +98,18 @@ namespace CSharp_Multiplayer_Snake
                 input = textBox.Text;
                 if (input.Length == 3 && Regex.IsMatch(input, @"^[a-zA-Z]+$"))
                     return input.ToUpper();
+            }
+        }
+
+        private static Color ShowColorInputDialog()
+        {
+            ColorDialog colorDialog = new ColorDialog();
+
+            while (true)
+            {
+                DialogResult result = colorDialog.ShowDialog();
+                if (result == DialogResult.OK)
+                    return colorDialog.Color;
             }
         }
 

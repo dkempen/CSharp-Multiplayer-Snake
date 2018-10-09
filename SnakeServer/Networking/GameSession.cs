@@ -188,6 +188,7 @@ namespace SnakeServer.Networking
             lock (client)
             {
                 client.Name = (string) jObject["name"];
+                GetSnake(client.Id).color = jObject["color"].ToObject<Color>();
             }
             return Task.FromResult<object>(null);
         }

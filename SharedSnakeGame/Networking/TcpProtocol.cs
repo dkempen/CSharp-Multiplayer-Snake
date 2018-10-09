@@ -64,12 +64,13 @@ namespace SharedSnakeGame.Networking
             };
         }
 
-        public static JObject NameSend(string name)
+        public static JObject NameSend(string name, Color color)
         {
             return new JObject
             {
                 {"command", "name/send" },
-                {"name", name }
+                {"name", name },
+                {"color", JToken.FromObject(color) }
             };
         }
 

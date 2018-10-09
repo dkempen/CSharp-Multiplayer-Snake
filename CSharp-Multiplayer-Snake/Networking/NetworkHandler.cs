@@ -50,7 +50,8 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         public void StartGame()
         {
-            IPAddress ip = IPAddress.Parse("127.0.0.1");//IPAddress.Parse("145.49.59.202");
+            IPAddress ip = IPAddress.Parse("127.0.0.1");
+//            IPAddress ip = IPAddress.Parse("145.49.59.202");
             client = new TcpClient(ip.ToString(), 6963);
             
                     
@@ -164,7 +165,7 @@ namespace CSharp_Multiplayer_Snake.Networking
 
         private void SendName()
         {
-            TcpHandler.WriteMessage(client, TcpProtocol.NameSend(form.Name));
+            TcpHandler.WriteMessage(client, TcpProtocol.NameSend(form.Name, form.Color));
         }
 
         public void EndGame()
