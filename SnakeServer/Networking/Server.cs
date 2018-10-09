@@ -31,13 +31,14 @@ namespace SnakeServer.Networking
                 }
                 else
                 {
+                    //First check if the previousClient is still alive
                     if (!CheckForPrevClient(previousClient))
                     {
                         previousClient = client;
                         continue;
                     }
 
-                    //First check if the previousClient is still alive
+                   
                     Console.WriteLine("Found 2 clients, creating session..");
                     GameSession gameSession = new GameSession(new List<ClientHandler> { new ClientHandler(previousClient, 1), new ClientHandler(client, 2) });
                     new Thread(gameSession.Run).Start();

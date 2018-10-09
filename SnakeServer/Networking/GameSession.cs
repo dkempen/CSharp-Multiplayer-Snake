@@ -19,7 +19,7 @@ namespace SnakeServer.Networking
         private GameLogic logic;
         private Timer timer;
         private bool isRunning;
-        private int amountOfApples = 2;
+        private const int amountOfApples = 2;
         private readonly int fps = 6;
 
         public GameSession(List<ClientHandler> clientHandlers)

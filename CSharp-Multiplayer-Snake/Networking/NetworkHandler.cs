@@ -17,7 +17,7 @@ namespace CSharp_Multiplayer_Snake.Networking
     class NetworkHandler
     {
         private Form form;
-        private TcpClient client { get; set; }
+        private TcpClient client;
         private int id;
         private Draw draw;
         public bool Disconnected { get; set; }
