@@ -30,8 +30,7 @@ namespace SnakeServer.Networking
         {
             try
             {
-              dynamic dontcare = TcpHandler.ReadMessage(client);
-              return JsonConvert.DeserializeObject<dynamic>(dontcare);
+              return JsonConvert.DeserializeObject<dynamic>(TcpHandler.ReadMessage(client));
             }
             catch (Exception e)
             {
