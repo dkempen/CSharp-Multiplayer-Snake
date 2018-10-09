@@ -12,7 +12,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Highscore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Game\Apple.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Game\GameData.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Game\GameObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Game\Snake.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Networking\TcpHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Networking\TcpProtocol.cs" />

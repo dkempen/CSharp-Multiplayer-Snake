@@ -1,11 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SharedSnakeGame.Data
 {
@@ -29,7 +25,7 @@ namespace SharedSnakeGame.Data
         public void AddTestData()
         {
             Highscores.Clear();
-            
+
             for (int i = Highscores.Count; i < maxListSize; i++)
                 AddHighScore(i, "NUB");
         }
@@ -41,19 +37,14 @@ namespace SharedSnakeGame.Data
             CheckScores();
         }
 
+        public static Highscore ReadHighScores()
+        {
+            return ReadFromBinaryFile<Highscore>("highscore.txt");
+        }
+
         public void WriteHighScores()
         {
             WriteToBinaryFile("highscore.txt", this);
-        }
-
-
-        public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false)
-        {
-            using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
-            {
-                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                binaryFormatter.Serialize(stream, objectToWrite);
-            }
         }
 
         public static T ReadFromBinaryFile<T>(string filePath)
@@ -65,14 +56,13 @@ namespace SharedSnakeGame.Data
             }
         }
 
-        public static Highscore ReadHighScores()
+        public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false)
         {
-            return ReadFromBinaryFile<Highscore>("highscore.txt");
-        }
-
-        public void PrintHighScores()
-        {
-            Console.WriteLine(ToString());
+            using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
+            {
+                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                binaryFormatter.Serialize(stream, objectToWrite);
+            }
         }
 
         public string ToString()

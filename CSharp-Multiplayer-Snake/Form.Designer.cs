@@ -16,9 +16,7 @@ namespace CSharp_Multiplayer_Snake
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
@@ -35,8 +33,8 @@ namespace CSharp_Multiplayer_Snake
             // 
             // gamePanel
             // 
-            this.gamePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.gamePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gamePanel.AutoSize = true;
             this.gamePanel.Location = new System.Drawing.Point(0, 0);
@@ -61,12 +59,9 @@ namespace CSharp_Multiplayer_Snake
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyPressedHandler);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
-
         #endregion
 
         private Panel gamePanel;
     }
 }
-

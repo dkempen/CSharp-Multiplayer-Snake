@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using Newtonsoft.Json.Linq;
@@ -16,14 +15,8 @@ namespace SharedSnakeGame.Networking
             Array.Copy(bytesLength, bytesToSend, bytesLength.Length);
             Array.Copy(bytesJson, 0, bytesToSend, 4, bytesJson.Length);
 
-            try
-            {
-                client.GetStream().Write(bytesToSend, 0, bytesToSend.Length);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            try { client.GetStream().Write(bytesToSend, 0, bytesToSend.Length); }
+            catch (Exception e) { throw e; }
         }
 
         public static string ReadMessage(TcpClient client)

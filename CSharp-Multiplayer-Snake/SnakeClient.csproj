@@ -85,9 +85,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Game\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="..\SharedSnakeGame\SharedSnakeGame.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

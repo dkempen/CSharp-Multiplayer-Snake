@@ -3,8 +3,6 @@ using Newtonsoft.Json;
 using SharedSnakeGame.Game;
 using SharedSnakeGame.Networking;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
@@ -23,9 +21,6 @@ namespace CSharp_Multiplayer_Snake.Networking
         private int id;
         private Draw draw;
         public bool Disconnected { get; set; }
-
-        public const int amountOfApples = 2;
-        public const int fps = 6;
         private GameData gameData;
         private bool waitDirectionChange;
 
@@ -35,7 +30,6 @@ namespace CSharp_Multiplayer_Snake.Networking
             draw = Draw.GetInstance();
             draw.Form = form;
             draw.GameData = gameData;
-
             new Thread(Run).Start();
         }
 
@@ -53,8 +47,6 @@ namespace CSharp_Multiplayer_Snake.Networking
             IPAddress ip = IPAddress.Parse("127.0.0.1");
 //            IPAddress ip = IPAddress.Parse("145.49.59.202");
             client = new TcpClient(ip.ToString(), 6963);
-            
-                    
 
             while (client.Available <= 0)
             {
@@ -75,7 +67,6 @@ namespace CSharp_Multiplayer_Snake.Networking
             else
             {
                 TcpHandler.WriteMessage(client, new JObject());
-                
                 tuple = ReadId();
             }
             SendName();
@@ -115,7 +106,6 @@ namespace CSharp_Multiplayer_Snake.Networking
             return highscore;
         }
 
-
         private bool ReadEndGame()
         {
             string message = TcpHandler.ReadMessage(client);
@@ -147,12 +137,14 @@ namespace CSharp_Multiplayer_Snake.Networking
                     EndGame();
                     return;
                 }
+
                 // Send direction
                 SendDirection();
                 waitDirectionChange = true;
                 gameData = ReadData();
                 draw.GameData = gameData;
                 waitDirectionChange = false;
+
                 //Le draw
                 Draw.GetInstance().DrawGame();
             }

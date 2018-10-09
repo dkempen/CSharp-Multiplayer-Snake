@@ -1,5 +1,4 @@
-﻿using System;
-using CSharp_Multiplayer_Snake;
+﻿using CSharp_Multiplayer_Snake;
 using Newtonsoft.Json.Linq;
 using SharedSnakeGame.Game;
 using SharedSnakeGame.Networking;
@@ -18,10 +17,10 @@ namespace SnakeServer.Networking
         private List<ClientHandler> clients;
         private GameData gameData;
         private GameLogic logic;
-        private int amountOfApples = 2;
         private Timer timer;
-        private readonly int fps = 6;
         private bool isRunning;
+        private int amountOfApples = 2;
+        private readonly int fps = 6;
 
         public GameSession(List<ClientHandler> clientHandlers)
         {
@@ -46,9 +45,8 @@ namespace SnakeServer.Networking
 
             foreach (ClientHandler client in clients)
                 client.Write(TcpProtocol.IdSend(gameData, client.Id));
-            
+
             ReadAll(false);
-                     
 
             // Start timer that calls a game tick update
             timer = new Timer();
@@ -69,18 +67,13 @@ namespace SnakeServer.Networking
             // Ask all clients for their snakes' direction
             Broadcast(TcpProtocol.TickSend());
 
-
-
             // Read all client directions
             ReadAll(true);
 
-
-            //Check if a client has been disconnected
+            // Check if a client has been disconnected
             CheckIfDisconnected();
 
-
-            //Logique
-
+            // Logique
             // For each snake check if next move it eats an apple and then update the snake
             foreach (Snake snake in GetAliveSnakes())
             {
@@ -127,15 +120,15 @@ namespace SnakeServer.Networking
         {
             // Stop the game timer
             timer.Stop();
-            
+
             // Get previous highscores
             Highscore highscore = Highscore.ReadHighScores();
-            
+
             // Update highscores
             foreach (ClientHandler client in clients)
                 highscore.AddHighScore(GetSnake(client.Id).Body.Count, client.Name);
             highscore.WriteHighScores();
-            
+
             // Send Endpacket and highscores
             Broadcast(TcpProtocol.EndSend());
             foreach (ClientHandler client in clients)
@@ -153,11 +146,8 @@ namespace SnakeServer.Networking
             foreach (ClientHandler client in clients)
                 if (client.Disconnected)
                     GetSnake(client.Id).IsDead = true;
-           // Console.WriteLine("Before: " + clients.Count);
             clients.RemoveAll(elem => elem.Disconnected == true);
-           // Console.WriteLine("After: " + clients.Count);
         }
-
 
         public async Task ReadAll(bool readDirection)
         {
@@ -187,7 +177,7 @@ namespace SnakeServer.Networking
             JObject jObject = client.Read();
             lock (client)
             {
-                client.Name = (string) jObject["name"];
+                client.Name = (string)jObject["name"];
                 GetSnake(client.Id).color = jObject["color"].ToObject<Color>();
             }
             return Task.FromResult<object>(null);

@@ -2,7 +2,7 @@
 
 namespace CSharp_Multiplayer_Snake
 {
-    class Apple : GameObject
+    class Apple
     {
         public Point Position { get; set; }
 

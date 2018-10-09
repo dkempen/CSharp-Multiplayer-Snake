@@ -17,7 +17,6 @@ namespace SnakeServer.Networking
 //            IPAddress localhost = IPAddress.Parse("145.49.59.202");
             tcpListener = new TcpListener(localhost, 6963);
             tcpListener.Start();
-
             TcpClient previousClient = null;
 
             while (true)
@@ -32,21 +31,18 @@ namespace SnakeServer.Networking
                 }
                 else
                 {
-
                     if (!CheckForPrevClient(previousClient))
                     {
                         previousClient = client;
                         continue;
                     }
 
-                    //Eerst checken of previousClient nog leeft
+                    //First check if the previousClient is still alive
                     Console.WriteLine("Found 2 clients, creating session..");
                     GameSession gameSession = new GameSession(new List<ClientHandler> { new ClientHandler(previousClient, 1), new ClientHandler(client, 2) });
                     new Thread(gameSession.Run).Start();
 
                     previousClient = null;
-                    client = null;
-
                 }
             }
         }

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CSharp_Multiplayer_Snake
 {
-    public class Snake : GameObject
+    public class Snake
     {
         public LinkedList<Point> Body { get; }
         public Point Head => Body.ElementAt(0);

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SharedSnakeGame.Game;
 using System.Drawing;
-using System.Dynamic;
-using Newtonsoft.Json.Converters;
 using SharedSnakeGame.Data;
 
 namespace SharedSnakeGame.Networking
@@ -20,17 +16,6 @@ namespace SharedSnakeGame.Networking
                 {"data", JsonConvert.SerializeObject(gamedata) }
             };
         }
-        
-        public static GameData DataReceived(string message)
-        {
-            dynamic json = ConvertToJson(message);
-            return (GameData)json.data;
-        }
-
-        private static dynamic ConvertToJson(string message)
-        {
-            return JsonConvert.DeserializeObject<dynamic>(message);
-        }
 
         public static JObject DirectionSend(Point point)
         {
@@ -44,7 +29,7 @@ namespace SharedSnakeGame.Networking
         public static Point DirectionReceived(dynamic json)
         {
             return new Point((int)json.pointX, (int)json.pointY);
-        } 
+        }
 
         public static JObject TickSend()
         {
@@ -98,6 +83,5 @@ namespace SharedSnakeGame.Networking
                 {"command", "disconnect/send" }
             };
         }
-
     }
 }

@@ -43,7 +43,7 @@ namespace CSharp_Multiplayer_Snake.Visuals
         {
             DrawBackgroud(panel);
             using (Font font = new Font("Courier New", 20))
-                TextRenderer.DrawText(g, "Please wait until\na player is found", 
+                TextRenderer.DrawText(g, "Please wait until\na player is found",
                     font, new Point(panel.Width / 2 - 140, panel.Height / 2 - 50), Color.Ivory);
         }
 

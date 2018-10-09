@@ -38,7 +38,6 @@ namespace CSharp_Multiplayer_Snake
             return snake.GetUpdatedHeadPosition().Equals(apple.Position);
         }
 
-        // 
         public void AddApples(GameData gameData, int amountOfApples)
         {
             while (gameData.Apples.Count < amountOfApples)
@@ -66,25 +65,8 @@ namespace CSharp_Multiplayer_Snake
                     position = p;
                     return;
                 }
-                
             }
             position = new Point(-1, -1);
-        }
-
-        public Point GenerateApplePosition(List<Snake> snakes, List<Apple> apples, int gridSize)
-        {
-            Random random = new Random();
-            List<int> randomCoord = Enumerable.Range(0, gridSize * gridSize).OrderBy(n => random.Next()).ToList();
-            for (int i = 0; i < randomCoord.Count; i++)
-            {
-                int x = randomCoord[i] / gridSize;
-                int y = randomCoord[i] % gridSize;
-                Point p = new Point(x, y);
-                bool possible = true;
-                if (CheckIfPositionIsPossible(snakes, apples, p))
-                    return p;
-            }
-            return new Point(-1, -1);
         }
 
         private bool CheckIfPositionIsPossible(List<Snake> snakes, List<Apple> apples, Point p)

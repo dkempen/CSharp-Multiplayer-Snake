@@ -18,7 +18,6 @@ namespace SnakeServer.Networking
             this.client = client;
             Id = id;
             Disconnected = false;
-
         }
 
         public void Write(JObject message)
@@ -30,7 +29,7 @@ namespace SnakeServer.Networking
         {
             try
             {
-              return JsonConvert.DeserializeObject<dynamic>(TcpHandler.ReadMessage(client));
+                return JsonConvert.DeserializeObject<dynamic>(TcpHandler.ReadMessage(client));
             }
             catch (Exception e)
             {
@@ -38,10 +37,6 @@ namespace SnakeServer.Networking
                 Disconnected = true;
                 return null;
             }
-           
         }
-
-
-        
     }
 }
