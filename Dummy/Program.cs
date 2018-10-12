@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace CSharp_Multiplayer_Snake
+namespace Dummy
 {
     static class Program
     {
@@ -10,7 +10,7 @@ namespace CSharp_Multiplayer_Snake
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form());
+            Application.Run(new Form1());
         }
     }
 }

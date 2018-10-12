@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeServer", "SnakeServer\
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedSnakeGame", "SharedSnakeGame\SharedSnakeGame.shproj", "{3A3D05CF-5554-4DCF-BC76-0CA80C8FCC72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dummy", "Dummy\Dummy.csproj", "{B8E32406-7E3E-4985-A16B-5386B24D3F77}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		SharedSnakeGame\SharedSnakeGame.projitems*{3a3d05cf-5554-4dcf-bc76-0ca80c8fcc72}*SharedItemsImports = 13
@@ -28,6 +30,10 @@ Global
 		{A0728DFD-4854-42B3-BA49-08B34E6375DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0728DFD-4854-42B3-BA49-08B34E6375DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0728DFD-4854-42B3-BA49-08B34E6375DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8E32406-7E3E-4985-A16B-5386B24D3F77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8E32406-7E3E-4985-A16B-5386B24D3F77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8E32406-7E3E-4985-A16B-5386B24D3F77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8E32406-7E3E-4985-A16B-5386B24D3F77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

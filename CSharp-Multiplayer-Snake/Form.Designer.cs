@@ -1,4 +1,6 @@
-﻿namespace CSharp_Multiplayer_Snake
+using System.Windows.Forms;
+
+namespace CSharp_Multiplayer_Snake
 {
     partial class Form
     {
@@ -14,9 +16,7 @@
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
@@ -28,21 +28,40 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.gamePanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
-            // Form1
+            // gamePanel
+            // 
+            this.gamePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.gamePanel.AutoSize = true;
+            this.gamePanel.Location = new System.Drawing.Point(0, 0);
+            this.gamePanel.Margin = new System.Windows.Forms.Padding(0);
+            this.gamePanel.Name = "gamePanel";
+            this.gamePanel.Size = new System.Drawing.Size(720, 720);
+            this.gamePanel.TabIndex = 0;
+            this.gamePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.GamePanelPaint);
+            // 
+            // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.ClientSize = new System.Drawing.Size(720, 720);
+            this.Controls.Add(this.gamePanel);
+            this.DoubleBuffered = true;
+            this.MaximizeBox = false;
+            this.Name = "Form";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Snake Mulitplayer by Daan van Kempen en Ian Vink 2018";
+            this.Load += new System.EventHandler(this.Form_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyPressedHandler);
             this.ResumeLayout(false);
-
+            this.PerformLayout();
         }
-
         #endregion
+
+        private Panel gamePanel;
     }
 }
-
